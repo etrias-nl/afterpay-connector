@@ -15,7 +15,10 @@
         "php-http/discovery": "~1.7"
     },
     "require-dev": {
+        "doctrine/cache": "^1.10",
         "friendsofphp/php-cs-fixer": "^2.16",
+        "nyholm/psr7": "^1.2",
+        "php-http/guzzle6-adapter": "^2.0",
         "phpunit/phpunit": "~8.5"
     },
     "autoload": {
