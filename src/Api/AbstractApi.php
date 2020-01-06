@@ -10,6 +10,8 @@ use Psr\Http\Client\ClientInterface;
 
 abstract class AbstractApi
 {
+    protected const JSON_FORMAT = 'json';
+
     /** @var HttpMethodsClientInterface */
     protected $client;
 
@@ -22,5 +24,10 @@ abstract class AbstractApi
     ) {
         $this->client = $client;
         $this->serializer = $serializer;
+    }
+
+    public function toJson(object $data): string
+    {
+        return $this->serializer->serialize($data, self::JSON_FORMAT);
     }
 }

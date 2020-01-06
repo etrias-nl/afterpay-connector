@@ -12,6 +12,7 @@ use Http\Client\Common\PluginClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +39,7 @@ abstract class ApiTestCase extends TestCase
 
         $this->serializer = SerializerBuilder::create()
             ->setCacheDir(sys_get_temp_dir().'/jms-cache')
+            ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
             ->addMetadataDir(__DIR__.'/../../../src/Serializer/Metadata', 'Etrias\AfterPayConnector')
             ->addDefaultDeserializationVisitors()
             ->addDefaultSerializationVisitors()

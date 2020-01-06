@@ -11,6 +11,8 @@ class PaymentApi extends AbstractApi
 {
     public function authorize(AuthorizePaymentRequest $request): AuthorizePaymentResponse
     {
+        var_dump($this->toJson($request));
+
         return new AuthorizePaymentResponse();
     }
 }
