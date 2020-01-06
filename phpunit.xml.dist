@@ -6,6 +6,11 @@
          colors="true"
          bootstrap="vendor/autoload.php"
 >
+    <php>
+        <env name="AFTERPAY_API_BASE_URI" value="https://sandbox.afterpay.io"/>
+        <env name="AFTERPAY_API_KEY" value=""/>
+    </php>
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
