@@ -29,8 +29,7 @@
         }
     },
     "scripts": {
-        "fix-style": [
-            "vendor/bin/php-cs-fixer fix --diff --show-progress run-in"
-        ]
+        "cs-fix": "vendor/bin/php-cs-fixer fix --ansi",
+        "test": "vendor/bin/phpunit"
     }
 }

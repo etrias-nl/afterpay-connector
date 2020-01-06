@@ -22,7 +22,7 @@ class Authentication implements Plugin
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise
     {
