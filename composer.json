@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "jms/serializer": "^2.3 || ^3.4",
+        "jms/serializer": "^3.4",
         "php-http/client-common": "^2.1",
         "php-http/discovery": "~1.7"
     },
