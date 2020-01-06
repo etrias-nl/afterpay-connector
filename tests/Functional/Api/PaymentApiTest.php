@@ -24,9 +24,7 @@ final class PaymentApiTest extends ApiTestCase
 
     public function testAuthorize(): void
     {
-        $request = new AuthorizePaymentRequest();
-        $request->merchantId = 'boo';
-
+        $request = AuthorizePaymentRequest::forInvoice();
         $response = $this->api->authorize($request);
 
         var_dump($response);

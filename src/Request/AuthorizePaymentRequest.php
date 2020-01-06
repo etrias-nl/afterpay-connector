@@ -30,4 +30,13 @@ class AuthorizePaymentRequest
 
     /** @var null|string */
     public $yourReference;
+
+    public static function forInvoice(): self
+    {
+        $request = new self();
+        $request->payment = new Payment();
+        $request->payment->type = Payment::TYPE_INVOICE;
+
+        return $request;
+    }
 }
