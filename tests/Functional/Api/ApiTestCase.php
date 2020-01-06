@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\HttpClient\Plugin\Authentication;
+use Etrias\AfterPayConnector\HttpClient\Plugin\ErrorHandler;
 use Http\Client\Common\HttpMethodsClient;
+use Http\Client\Common\HttpMethodsClientInterface;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Http\Client\Common\Plugin\ErrorPlugin;
 use Http\Client\Common\PluginClient;
@@ -16,11 +18,10 @@ use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientInterface;
 
 abstract class ApiTestCase extends TestCase
 {
-    /** @var ClientInterface */
+    /** @var HttpMethodsClientInterface */
     protected $client;
 
     /** @var SerializerInterface */
@@ -31,6 +32,7 @@ abstract class ApiTestCase extends TestCase
         $this->client = new HttpMethodsClient(
             new PluginClient(HttpClientDiscovery::find(), [
                 new ErrorPlugin(['only_server_exception' => true]),
+                new ErrorHandler(),
                 new BaseUriPlugin(Psr17FactoryDiscovery::findUrlFactory()->createUri(getenv('AFTERPAY_API_BASE_URI'))),
                 new Authentication(getenv('AFTERPAY_API_KEY')),
             ]),

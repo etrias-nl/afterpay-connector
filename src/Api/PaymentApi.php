@@ -11,8 +11,10 @@ class PaymentApi extends AbstractApi
 {
     public function authorize(AuthorizePaymentRequest $request): AuthorizePaymentResponse
     {
-        var_dump($this->toJson($request));
+        $uri = $this->uriFactory->createUri('/checkout/authorize');
+        $response = $this->postJsonRequest($uri, $request);
 
+        // @todo
         return new AuthorizePaymentResponse();
     }
 }

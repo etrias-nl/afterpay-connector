@@ -6,6 +6,7 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Api\PaymentApi;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
+use Etrias\AfterPayConnector\Type\CheckoutCustomer;
 
 /**
  * @internal
@@ -25,6 +26,7 @@ final class PaymentApiTest extends ApiTestCase
     public function testAuthorize(): void
     {
         $request = AuthorizePaymentRequest::forInvoice();
+        $request->customer = CheckoutCustomer::forPerson();
         $response = $this->api->authorize($request);
 
         var_dump($response);

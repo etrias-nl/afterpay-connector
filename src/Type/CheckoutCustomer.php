@@ -14,7 +14,7 @@ class CheckoutCustomer
     public const SALUTATION_MISS = 'Miss';
 
     /** @var null|string */
-    public $category;
+    public $customerCategory;
 
     /** @var null|\DateTimeInterface */
     public $birthDate;
@@ -48,4 +48,20 @@ class CheckoutCustomer
 
     /** @var null|string */
     public $phone;
+
+    public static function forPerson(): self
+    {
+        $customer = new self();
+        $customer->customerCategory = self::CATEGORY_PERSON;
+
+        return $customer;
+    }
+
+    public static function forCompany(): self
+    {
+        $customer = new self();
+        $customer->customerCategory = self::CATEGORY_COMPANY;
+
+        return $customer;
+    }
 }

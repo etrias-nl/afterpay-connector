@@ -7,7 +7,7 @@
          bootstrap="vendor/autoload.php"
 >
     <php>
-        <env name="AFTERPAY_API_BASE_URI" value="https://sandbox.afterpay.io"/>
+        <env name="AFTERPAY_API_BASE_URI" value="https://sandbox.afterpay.io/api/v3"/>
         <env name="AFTERPAY_API_KEY" value=""/>
     </php>
 
