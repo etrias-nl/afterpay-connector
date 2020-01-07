@@ -1,0 +1,12 @@
+Etrias\AfterPayConnector\Response\CustomerResponse:
+  properties:
+    customerAccountId:
+      type: string
+    customerNumber:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    addressList:
+      type: array<Etrias\AfterPayConnector\Type\Address>

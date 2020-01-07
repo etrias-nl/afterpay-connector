@@ -1,0 +1,14 @@
+Etrias\AfterPayConnector\Response\AuthorizePaymentResponse:
+  properties:
+    outcome:
+      type: string
+    customer:
+      type: Etrias\AfterPayConnector\Response\CustomerResponse
+    deliveryCustomer:
+      type: Etrias\AfterPayConnector\Response\CustomerResponse
+    checkoutId:
+      type: string
+    reservationId:
+      type: string
+    expirationDate:
+      type: DateTimeImmutable<null, null, 'Y-m-d'>

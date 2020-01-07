@@ -1,0 +1,4 @@
+Etrias\AfterPayConnector\Type\CheckoutCustomer:
+  properties:
+    birthDate:
+      type: DateTimeImmutable<'Y-m-d'>

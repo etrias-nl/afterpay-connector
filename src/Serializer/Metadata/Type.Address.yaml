@@ -1,0 +1,14 @@
+Etrias\AfterPayConnector\Type\Address:
+  properties:
+    countryCode:
+      type: string
+    postalCode:
+      type: string
+    postalPlace:
+      type: string
+    street:
+      type: string
+    streetNumber:
+      type: string
+    streetNumberAdditional:
+      type: string

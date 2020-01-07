@@ -49,10 +49,11 @@ class CheckoutCustomer
     /** @var null|string */
     public $phone;
 
-    public static function forPerson(): self
+    public static function forPerson(?string $email = null): self
     {
         $customer = new self();
         $customer->customerCategory = self::CATEGORY_PERSON;
+        $customer->email = $email;
 
         return $customer;
     }
@@ -63,5 +64,21 @@ class CheckoutCustomer
         $customer->customerCategory = self::CATEGORY_COMPANY;
 
         return $customer;
+    }
+
+    public function withName(?string $salutation, ?string $firstName, ?string $lastName): self
+    {
+        $this->salutation = $salutation;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function withBirthDate(int $day, int $month, int $year): self
+    {
+        $this->birthDate = (new \DateTimeImmutable())->setTimestamp(mktime(0, 0, 0, $month, $day, $year));
+
+        return $this;
     }
 }

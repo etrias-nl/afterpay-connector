@@ -26,4 +26,23 @@ class Order
 
     /** @var null|string */
     public $number;
+
+    /**
+     * @param OrderItem[] $items
+     */
+    public static function forItems(string $number, iterable $items): self
+    {
+        $order = new self();
+        $order->number = $number;
+        $order->totalGrossAmount = .0;
+        $order->totalNetAmount = .0;
+
+        foreach ($order->items as $item) {
+            $order->items[] = $item;
+            $order->totalGrossAmount += $item->grossUnitPrice * $item->quantity;
+            $order->totalNetAmount += $item->netUnitPrice * $item->quantity;
+        }
+
+        return $order;
+    }
 }

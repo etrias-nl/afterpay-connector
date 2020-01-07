@@ -46,4 +46,9 @@ abstract class AbstractApi
             $this->serializer->serialize($data, self::JSON_FORMAT)
         );
     }
+
+    protected function fromJsonResponse(ResponseInterface $response, string $type): object
+    {
+        return $this->serializer->deserialize((string) $response->getBody(), $type, self::JSON_FORMAT);
+    }
 }

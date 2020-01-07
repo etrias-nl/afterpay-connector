@@ -10,12 +10,10 @@ class ResponseMediator
 {
     public static function getData(ResponseInterface $response): array
     {
-        $body = $response->getBody()->getContents();
-
         if (0 === strpos($response->getHeaderLine('Content-Type'), 'application/json')) {
-            $content = json_decode($body, true);
+            $content = \GuzzleHttp\json_decode((string) $response->getBody(), true);
 
-            if (JSON_ERROR_NONE === json_last_error() && \is_array($content)) {
+            if (\is_array($content)) {
                 return $content;
             }
         }

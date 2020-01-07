@@ -23,6 +23,7 @@ class ErrorHandler implements Plugin
         return $next($request)->then(function (ResponseInterface $response) {
             if ($response->getStatusCode() < 500) {
                 $data = ResponseMediator::getData($response);
+
                 if (isset($data[0]['type']) && \in_array($data[0]['type'], self::ERROR_TYPES, true)) {
                     throw new AfterPayException(self::getErrorMessage($data[0]));
                 }
