@@ -8,6 +8,7 @@ use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 use Etrias\AfterPayConnector\Response\CaptureResponse;
+use Etrias\AfterPayConnector\Response\GetAllCapturesResponse;
 use Etrias\AfterPayConnector\Response\GetAllRefundsResponse;
 use Etrias\AfterPayConnector\Response\GetOrderResponse;
 use Etrias\AfterPayConnector\Response\GetVoidsResponse;
@@ -78,5 +79,21 @@ class OrderApi extends AbstractApi
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetAllRefundsResponse::class);
+    }
+
+    public function getCaptures(string $orderNumber): GetAllCapturesResponse
+    {
+        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures', compact('orderNumber')));
+        $response = $this->getJson($uri);
+
+        return $this->deserialize($response, GetAllCapturesResponse::class);
+    }
+
+    public function getCapture(string $orderNumber, string $captureNumber): GetAllCapturesResponse
+    {
+        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures/{captureNumber}', compact('orderNumber', 'captureNumber')));
+        $response = $this->getJson($uri);
+
+        return $this->deserialize($response, GetAllCapturesResponse::class);
     }
 }

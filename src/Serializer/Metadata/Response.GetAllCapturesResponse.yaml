@@ -1,0 +1,4 @@
+Etrias\AfterPayConnector\Response\GetAllCapturesResponse:
+  properties:
+    captures:
+      type: array<Etrias\AfterPayConnector\Type\Capture>
