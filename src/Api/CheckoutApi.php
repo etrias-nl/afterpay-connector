@@ -9,7 +9,7 @@ use Etrias\AfterPayConnector\Request\AvailablePaymentMethodsRequest;
 use Etrias\AfterPayConnector\Response\AuthorizePaymentResponse;
 use Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse;
 
-class PaymentApi extends AbstractApi
+class CheckoutApi extends AbstractApi
 {
     public function authorize(AuthorizePaymentRequest $request): AuthorizePaymentResponse
     {

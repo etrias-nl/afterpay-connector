@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
-use Etrias\AfterPayConnector\Api\PaymentApi;
+use Etrias\AfterPayConnector\Api\CheckoutApi;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
 use Etrias\AfterPayConnector\Request\AvailablePaymentMethodsRequest;
 use Etrias\AfterPayConnector\Response\AuthorizePaymentResponse;
@@ -13,16 +13,16 @@ use Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse;
 /**
  * @internal
  */
-final class PaymentApiTest extends ApiTestCase
+final class CheckoutApiTest extends ApiTestCase
 {
-    /** @var PaymentApi */
+    /** @var CheckoutApi */
     protected $api;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->api = new PaymentApi($this->client, $this->serializer);
+        $this->api = new CheckoutApi($this->client, $this->serializer);
     }
 
     public function testAuthorize(): void
