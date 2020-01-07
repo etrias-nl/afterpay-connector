@@ -6,5 +6,5 @@ namespace Etrias\AfterPayConnector\Request;
 
 class AvailablePaymentMethodsRequest
 {
-    use AuthorizeTrait;
+    use AuthorizeRequestTrait;
 }

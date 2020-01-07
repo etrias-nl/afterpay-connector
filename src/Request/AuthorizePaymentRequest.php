@@ -8,7 +8,7 @@ use Etrias\AfterPayConnector\Type\Payment;
 
 class AuthorizePaymentRequest
 {
-    use AuthorizeTrait;
+    use AuthorizeRequestTrait;
 
     /** @var null|Payment */
     public $payment;

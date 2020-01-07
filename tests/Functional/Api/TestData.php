@@ -29,15 +29,26 @@ abstract class TestData
         ;
     }
 
-    public static function order(): Order
+    public static function order(?string $number = null): Order
     {
-        return Order::forItems('TEST-'.bin2hex(random_bytes(10)), [
+        $order = Order::forItems(self::orderItems());
+        $order->number = $number ?? 'TEST-'.bin2hex(random_bytes(10));
+
+        return $order;
+    }
+
+    /**
+     * @return OrderItem[]
+     */
+    public static function orderItems(): array
+    {
+        return [
             OrderItem::forProduct('A', 'Product A', 1)
                 ->withPrice(2, 1)
                 ->withVat(1, 21),
             OrderItem::forProduct('B', 'Product B 😁', 3)
                 ->withPrice(3.5, 2.25)
                 ->withVat(1, 6),
-        ]);
+        ];
     }
 }

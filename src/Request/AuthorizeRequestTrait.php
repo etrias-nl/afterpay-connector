@@ -7,7 +7,7 @@ namespace Etrias\AfterPayConnector\Request;
 use Etrias\AfterPayConnector\Type\CheckoutCustomer;
 use Etrias\AfterPayConnector\Type\Order;
 
-trait AuthorizeTrait
+trait AuthorizeRequestTrait
 {
     /** @var null|CheckoutCustomer */
     public $customer;
