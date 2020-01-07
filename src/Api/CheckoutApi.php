@@ -11,7 +11,7 @@ use Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse;
 
 class CheckoutApi extends AbstractApi
 {
-    public function authorize(AuthorizePaymentRequest $request): AuthorizePaymentResponse
+    public function authorizePayment(AuthorizePaymentRequest $request): AuthorizePaymentResponse
     {
         $uri = $this->uriFactory->createUri('/checkout/authorize');
         $response = $this->postJsonRequest($uri, $request);
@@ -19,7 +19,7 @@ class CheckoutApi extends AbstractApi
         return $this->fromJsonResponse($response, AuthorizePaymentResponse::class);
     }
 
-    public function getAvailableMethods(AvailablePaymentMethodsRequest $request): AvailablePaymentMethodsResponse
+    public function getAvailablePaymentMethods(AvailablePaymentMethodsRequest $request): AvailablePaymentMethodsResponse
     {
         $uri = $this->uriFactory->createUri('/checkout/payment-methods');
         $response = $this->postJsonRequest($uri, $request);

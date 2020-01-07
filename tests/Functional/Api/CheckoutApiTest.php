@@ -25,13 +25,13 @@ final class CheckoutApiTest extends ApiTestCase
         $this->api = new CheckoutApi($this->client, $this->serializer);
     }
 
-    public function testAuthorize(): void
+    public function testAuthorizePayment(): void
     {
         $request = AuthorizePaymentRequest::forInvoice();
         $request->customer = TestData::checkoutCustomer();
         $request->order = TestData::order();
 
-        $response = $this->api->authorize($request);
+        $response = $this->api->authorizePayment($request);
 
         self::assertSame(AuthorizePaymentResponse::OUTCOME_ACCEPTED, $response->outcome);
         self::assertSame('John', $response->customer->firstName);
@@ -42,13 +42,13 @@ final class CheckoutApiTest extends ApiTestCase
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
     }
 
-    public function testAvailableMethods(): void
+    public function testAvailablePaymentMethods(): void
     {
         $request = new AvailablePaymentMethodsRequest();
         $request->customer = TestData::checkoutCustomer();
         $request->order = TestData::order();
 
-        $response = $this->api->getAvailableMethods($request);
+        $response = $this->api->getAvailablePaymentMethods($request);
 
         self::assertSame(AvailablePaymentMethodsResponse::OUTCOME_ACCEPTED, $response->outcome);
         self::assertSame('John', $response->customer->firstName);
