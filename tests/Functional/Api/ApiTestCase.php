@@ -21,24 +21,14 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ApiTestCase extends TestCase
 {
-    /** @var HttpMethodsClientInterface */
-    protected $client;
-
     /** @var SerializerInterface */
     protected $serializer;
 
+    /** @var HttpMethodsClientInterface */
+    protected $client;
+
     protected function setUp(): void
     {
-        $this->client = new HttpMethodsClient(
-            new PluginClient(HttpClientDiscovery::find(), [
-                new ErrorPlugin(['only_server_exception' => true]),
-                new ErrorHandler(),
-                new BaseUriPlugin(Psr17FactoryDiscovery::findUrlFactory()->createUri(getenv('AFTERPAY_API_BASE_URI'))),
-                new Authentication(getenv('AFTERPAY_API_KEY')),
-            ]),
-            new GuzzleMessageFactory()
-        );
-
         $this->serializer = SerializerBuilder::create()
             ->setCacheDir(sys_get_temp_dir().'/jms-cache')
             ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
@@ -48,5 +38,15 @@ abstract class ApiTestCase extends TestCase
             ->addDefaultHandlers()
             ->build()
         ;
+
+        $this->client = new HttpMethodsClient(
+            new PluginClient(HttpClientDiscovery::find(), [
+                new ErrorPlugin(['only_server_exception' => true]),
+                new ErrorHandler($this->serializer),
+                new BaseUriPlugin(Psr17FactoryDiscovery::findUrlFactory()->createUri(getenv('AFTERPAY_API_BASE_URI'))),
+                new Authentication(getenv('AFTERPAY_API_KEY')),
+            ]),
+            new GuzzleMessageFactory()
+        );
     }
 }

@@ -1,0 +1,14 @@
+Etrias\AfterPayConnector\Type\ResponseMessage:
+  properties:
+    type:
+      type: string
+    code:
+      type: string
+    actionCode:
+      type: string
+    message:
+      type: string
+    customerFacingMessage:
+      type: string
+    fieldReference:
+      type: string
