@@ -6,6 +6,7 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Api\OrderApi;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
+use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 
 /**
@@ -50,5 +51,22 @@ final class OrderApiTest extends ApiTestCase
         self::assertSame('0', $response->remainingAuthorizedAmount);
         self::assertSame('38', $response->totalAuthorizedAmount);
         self::assertSame('0', $response->totalCapturedAmount);
+    }
+
+    public function testRefundPayment(): void
+    {
+        $this->checkout($orderNumber = TestData::orderNumber());
+        $captureNumber = $this->capture($orderNumber);
+
+        $request = RefundOrderRequest::forRefund($captureNumber)
+            ->withItems(TestData::refundOrderItem())
+        ;
+
+        $response = $this->api->refundPayment($orderNumber, $request);
+
+        self::assertIsString($response->refundNumbers[0]);
+        self::assertSame('38', $response->totalAuthorizedAmount);
+        self::assertSame('38', $response->totalCapturedAmount);
+        self::assertSame('12.5', $response->totalRefundedAmount);
     }
 }

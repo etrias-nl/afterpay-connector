@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Api\CheckoutApi;
+use Etrias\AfterPayConnector\Api\OrderApi;
 use Etrias\AfterPayConnector\HttpClient\Plugin\Authentication;
 use Etrias\AfterPayConnector\HttpClient\Plugin\ErrorHandler;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
+use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Common\HttpMethodsClientInterface;
 use Http\Client\Common\Plugin\BaseUriPlugin;
@@ -59,5 +61,13 @@ abstract class ApiTestCase extends TestCase
         $request->order = TestData::order($orderNumber);
 
         return (new CheckoutApi($this->client, $this->serializer))->authorizePayment($request)->checkoutId;
+    }
+
+    protected function capture(string $orderNumber): string
+    {
+        $request = new CaptureRequest();
+        $request->orderDetails = TestData::orderSummary();
+
+        return (new OrderApi($this->client, $this->serializer))->capturePayment($orderNumber, $request)->captureNumber;
     }
 }

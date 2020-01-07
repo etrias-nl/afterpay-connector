@@ -26,12 +26,12 @@ class Address
 
     public static function forPlace(?string $countryCode, ?string $postalCode, ?string $postalPlace): self
     {
-        $address = new self();
-        $address->countryCode = $countryCode;
-        $address->postalCode = $postalCode;
-        $address->postalPlace = $postalPlace;
+        $object = new self();
+        $object->countryCode = $countryCode;
+        $object->postalCode = $postalCode;
+        $object->postalPlace = $postalPlace;
 
-        return $address;
+        return $object;
     }
 
     public function withStreet(?string $street, ?string $streetNumber, ?string $streetNumberAdditional): self

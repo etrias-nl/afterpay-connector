@@ -23,16 +23,16 @@ trait OrderSummaryTrait
      */
     public static function forItems(iterable $items): self
     {
-        $order = new self();
-        $order->totalGrossAmount = .0;
-        $order->totalNetAmount = .0;
+        $object = new self();
+        $object->totalGrossAmount = .0;
+        $object->totalNetAmount = .0;
 
         foreach ($items as $item) {
-            $order->items[] = $item;
-            $order->totalGrossAmount += $item->grossUnitPrice * $item->quantity;
-            $order->totalNetAmount += $item->netUnitPrice * $item->quantity;
+            $object->items[] = $item;
+            $object->totalGrossAmount += $item->grossUnitPrice * $item->quantity;
+            $object->totalNetAmount += $item->netUnitPrice * $item->quantity;
         }
 
-        return $order;
+        return $object;
     }
 }

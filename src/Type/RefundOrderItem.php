@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Etrias\AfterPayConnector\Type;
 
-class OrderItem
+class RefundOrderItem
 {
     use OrderItemTrait;
+
+    /** @var null|string */
+    public $refundType;
 }

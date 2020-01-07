@@ -1,0 +1,10 @@
+Etrias\AfterPayConnector\Response\RefundOrderResponse:
+  properties:
+    refundNumbers:
+      type: array<string>
+    totalAuthorizedAmount:
+      type: string
+    totalCapturedAmount:
+      type: string
+    totalRefundedAmount:
+      type: string

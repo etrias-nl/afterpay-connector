@@ -51,19 +51,19 @@ class CheckoutCustomer
 
     public static function forPerson(?string $email = null): self
     {
-        $customer = new self();
-        $customer->customerCategory = self::CATEGORY_PERSON;
-        $customer->email = $email;
+        $object = new self();
+        $object->customerCategory = self::CATEGORY_PERSON;
+        $object->email = $email;
 
-        return $customer;
+        return $object;
     }
 
     public static function forCompany(): self
     {
-        $customer = new self();
-        $customer->customerCategory = self::CATEGORY_COMPANY;
+        $object = new self();
+        $object->customerCategory = self::CATEGORY_COMPANY;
 
-        return $customer;
+        return $object;
     }
 
     public function withName(?string $salutation, ?string $firstName, ?string $lastName): self

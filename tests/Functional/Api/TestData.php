@@ -9,6 +9,7 @@ use Etrias\AfterPayConnector\Type\CheckoutCustomer;
 use Etrias\AfterPayConnector\Type\Order;
 use Etrias\AfterPayConnector\Type\OrderItem;
 use Etrias\AfterPayConnector\Type\OrderSummary;
+use Etrias\AfterPayConnector\Type\RefundOrderItem;
 
 abstract class TestData
 {
@@ -54,6 +55,13 @@ abstract class TestData
             OrderItem::forProduct('B', 'Product B 😁', 3)
                 ->withPrice(5.5, 3, 6),
         ];
+    }
+
+    public static function refundOrderItem(): RefundOrderItem
+    {
+        return RefundOrderItem::forProduct('A', 'Product A', 1)
+            ->withPrice(10, 2.5, 21)
+        ;
     }
 
     public static function orderNumber(): string
