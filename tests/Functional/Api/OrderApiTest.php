@@ -160,4 +160,36 @@ final class OrderApiTest extends ApiTestCase
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->refunds[0]->reservationId);
         self::assertNull($response->refunds[0]->updatedAt);
     }
+
+    public function testGetVoids(): void
+    {
+        $this->checkout($orderNumber = TestData::orderNumber());
+        $this->cancel($orderNumber);
+
+        $response = $this->orderApi->getVoids($orderNumber);
+
+        self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
+        self::assertSame('38', $response->cancellations[0]->cancellationAmount);
+        self::assertInstanceOf(CancellationItem::class, $response->cancellations[0]->cancellationItems[0]);
+        self::assertSame(TestData::orderItems()[0]->productId, $response->cancellations[0]->cancellationItems[0]->productId);
+        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->cancellations[0]->cancellationItems[0]->quantity);
+        self::assertSame($response->cancellations[0]->cancellationNo, $response->cancellations[0]->cancellationItems[0]->cancellationNumber);
+        self::assertIsString($response->cancellations[0]->cancellationNo);
+    }
+
+    public function testGetVoid(): void
+    {
+        $this->checkout($orderNumber = TestData::orderNumber());
+        $this->cancel($orderNumber);
+
+        $response = $this->orderApi->getVoid($orderNumber, $this->orderApi->getVoids($orderNumber)->cancellations[0]->cancellationNo);
+
+        self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
+        self::assertSame('38', $response->cancellations[0]->cancellationAmount);
+        self::assertInstanceOf(CancellationItem::class, $response->cancellations[0]->cancellationItems[0]);
+        self::assertSame(TestData::orderItems()[0]->productId, $response->cancellations[0]->cancellationItems[0]->productId);
+        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->cancellations[0]->cancellationItems[0]->quantity);
+        self::assertSame($response->cancellations[0]->cancellationNo, $response->cancellations[0]->cancellationItems[0]->cancellationNumber);
+        self::assertIsString($response->cancellations[0]->cancellationNo);
+    }
 }

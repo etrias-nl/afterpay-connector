@@ -9,6 +9,7 @@ use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 use Etrias\AfterPayConnector\Response\CaptureResponse;
 use Etrias\AfterPayConnector\Response\GetOrderResponse;
+use Etrias\AfterPayConnector\Response\GetVoidsResponse;
 use Etrias\AfterPayConnector\Response\RefundOrderResponse;
 use Etrias\AfterPayConnector\Response\VoidAuthorizationResponse;
 
@@ -44,5 +45,21 @@ class OrderApi extends AbstractApi
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetOrderResponse::class);
+    }
+
+    public function getVoids(string $orderNumber): GetVoidsResponse
+    {
+        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/voids', compact('orderNumber')));
+        $response = $this->getJson($uri);
+
+        return $this->deserialize($response, GetVoidsResponse::class);
+    }
+
+    public function getVoid(string $orderNumber, string $voidNumber): GetVoidsResponse
+    {
+        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/voids/{voidNumber}', compact('orderNumber', 'voidNumber')));
+        $response = $this->getJson($uri);
+
+        return $this->deserialize($response, GetVoidsResponse::class);
     }
 }

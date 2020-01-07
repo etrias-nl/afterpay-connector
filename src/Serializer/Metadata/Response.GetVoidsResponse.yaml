@@ -1,0 +1,4 @@
+Etrias\AfterPayConnector\Response\GetVoidsResponse:
+  properties:
+    cancellations:
+      type: array<Etrias\AfterPayConnector\Type\Cancellation>
