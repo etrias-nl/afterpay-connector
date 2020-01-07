@@ -8,7 +8,7 @@
 >
     <php>
         <env name="AFTERPAY_API_BASE_URI" value="https://sandbox.afterpay.io/api/v3"/>
-        <env name="AFTERPAY_API_KEY" value="44D02E914612838F2FB0680499A837A7"/>
+        <env name="AFTERPAY_API_KEY" value=""/>
     </php>
 
     <testsuites>

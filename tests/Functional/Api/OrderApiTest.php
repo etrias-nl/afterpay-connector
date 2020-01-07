@@ -6,6 +6,7 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Api\OrderApi;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
+use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 
 /**
  * @internal
@@ -35,5 +36,19 @@ final class OrderApiTest extends ApiTestCase
         self::assertSame('38', $response->capturedAmount);
         self::assertNotEmpty($response->captureNumber);
         self::assertSame('0', $response->remainingAuthorizedAmount);
+    }
+
+    public function testVoidAuthorization(): void
+    {
+        $this->checkout($orderNumber = TestData::orderNumber());
+
+        $request = new VoidAuthorizationRequest();
+        $request->cancellationDetails = TestData::orderSummary();
+
+        $response = $this->api->voidAuthorization($orderNumber, $request);
+
+        self::assertSame('0', $response->remainingAuthorizedAmount);
+        self::assertSame('38', $response->totalAuthorizedAmount);
+        self::assertSame('0', $response->totalCapturedAmount);
     }
 }

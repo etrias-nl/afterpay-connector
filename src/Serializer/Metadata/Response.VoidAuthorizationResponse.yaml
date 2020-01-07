@@ -1,0 +1,8 @@
+Etrias\AfterPayConnector\Response\VoidAuthorizationResponse:
+  properties:
+    remainingAuthorizedAmount:
+      type: string
+    totalAuthorizedAmount:
+      type: string
+    totalCapturedAmount:
+      type: string
