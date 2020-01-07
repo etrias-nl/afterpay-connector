@@ -1,0 +1,8 @@
+Etrias\AfterPayConnector\Type\PaymentMethod:
+  properties:
+    logo:
+      type: string
+    tag:
+      type: string
+    title:
+      type: string

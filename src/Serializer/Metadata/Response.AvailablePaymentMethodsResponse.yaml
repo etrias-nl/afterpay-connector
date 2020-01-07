@@ -1,0 +1,12 @@
+Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse:
+  properties:
+    outcome:
+      type: string
+    customer:
+      type: Etrias\AfterPayConnector\Response\CustomerResponse
+    deliveryCustomer:
+      type: Etrias\AfterPayConnector\Response\CustomerResponse
+    checkoutId:
+      type: string
+    paymentMethods:
+      type: array<Etrias\AfterPayConnector\Type\PaymentMethod>
