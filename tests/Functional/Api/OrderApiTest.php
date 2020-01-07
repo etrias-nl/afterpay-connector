@@ -7,12 +7,14 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 use Etrias\AfterPayConnector\Exception\AfterPayException;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Etrias\AfterPayConnector\Request\RefundOrderRequest;
+use Etrias\AfterPayConnector\Request\UpdateOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 use Etrias\AfterPayConnector\Type\Cancellation;
 use Etrias\AfterPayConnector\Type\CancellationItem;
 use Etrias\AfterPayConnector\Type\Capture;
 use Etrias\AfterPayConnector\Type\CaptureItem;
 use Etrias\AfterPayConnector\Type\OrderItemExtended;
+use Etrias\AfterPayConnector\Type\Outcome;
 use Etrias\AfterPayConnector\Type\Payment;
 use Etrias\AfterPayConnector\Type\Refund;
 use Etrias\AfterPayConnector\Type\RefundItem;
@@ -357,5 +359,34 @@ final class OrderApiTest extends ApiTestCase
         $this->expectException(AfterPayException::class);
 
         $this->orderApi->getCapture($orderNumber, 'UNKNOWN');
+    }
+
+    public function testUpdateOrder(): void
+    {
+        $this->checkout($orderNumber = TestData::orderNumber());
+
+        self::assertSame(TestData::orderItems()[0]->description, $this->orderApi->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+
+        $request = new UpdateOrderRequest();
+        $request->updateOrderSummary = TestData::orderSummary();
+        $request->updateOrderSummary->items[0]->description .= ' MODIFIED';
+
+        $response = $this->orderApi->updateOrder($orderNumber, $request);
+
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
+        self::assertInstanceOf(\DateTimeImmutable::class, $response->expirationDate);
+        self::assertSame(Outcome::ACCEPTED, $response->outcome);
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
+        self::assertSame(TestData::orderItems()[0]->description.' MODIFIED', $this->orderApi->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+    }
+
+    public function testUpdateOrderWithUnknownNumber(): void
+    {
+        $request = new UpdateOrderRequest();
+        $request->updateOrderSummary = TestData::orderSummary();
+
+        $this->expectException(AfterPayException::class);
+
+        $this->orderApi->updateOrder('UNKNOWN', $request);
     }
 }
