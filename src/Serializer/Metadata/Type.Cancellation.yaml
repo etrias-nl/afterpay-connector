@@ -1,0 +1,8 @@
+Etrias\AfterPayConnector\Type\Cancellation:
+  properties:
+    cancellationAmount:
+      type: string
+    cancellationItems:
+      type: array<Etrias\AfterPayConnector\Type\CancellationItem>
+    cancellationNo:
+      type: string

@@ -1,0 +1,12 @@
+Etrias\AfterPayConnector\Response\GetOrderResponse:
+  properties:
+    cancellations:
+      type: array<Etrias\AfterPayConnector\Type\Cancellation>
+    captures:
+      type: array<Etrias\AfterPayConnector\Type\Capture>
+    orderDetails:
+      type: Etrias\AfterPayConnector\Type\ResponseOrderDetails
+    payment:
+      type: Etrias\AfterPayConnector\Type\Payment
+    refunds:
+      type: array<Etrias\AfterPayConnector\Type\Refund>

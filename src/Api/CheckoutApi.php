@@ -14,16 +14,16 @@ class CheckoutApi extends AbstractApi
     public function authorizePayment(AuthorizePaymentRequest $request): AuthorizePaymentResponse
     {
         $uri = $this->uriFactory->createUri('/checkout/authorize');
-        $response = $this->postJsonRequest($uri, $request);
+        $response = $this->postJson($uri, $request);
 
-        return $this->fromJsonResponse($response, AuthorizePaymentResponse::class);
+        return $this->deserialize($response, AuthorizePaymentResponse::class);
     }
 
     public function getAvailablePaymentMethods(AvailablePaymentMethodsRequest $request): AvailablePaymentMethodsResponse
     {
         $uri = $this->uriFactory->createUri('/checkout/payment-methods');
-        $response = $this->postJsonRequest($uri, $request);
+        $response = $this->postJson($uri, $request);
 
-        return $this->fromJsonResponse($response, AvailablePaymentMethodsResponse::class);
+        return $this->deserialize($response, AvailablePaymentMethodsResponse::class);
     }
 }

@@ -1,0 +1,22 @@
+Etrias\AfterPayConnector\Type\ResponseOrderDetails:
+  properties:
+    currency:
+      type: string
+    customer:
+      type: Etrias\AfterPayConnector\Type\CheckoutCustomer
+    expirationDate:
+      type: DateTimeImmutable<null, null, 'Y-m-d'>
+    insertedAt:
+      type: DateTimeImmutable
+    orderId:
+      type: string
+    orderItems:
+      type: array<Etrias\AfterPayConnector\Type\OrderItemExtended>
+    orderNumber:
+      type: string
+    totalGrossAmount:
+      type: string
+    totalNetAmount:
+      type: string
+    updatedAt:
+      type: DateTimeImmutable

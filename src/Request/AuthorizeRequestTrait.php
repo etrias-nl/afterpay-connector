@@ -6,9 +6,12 @@ namespace Etrias\AfterPayConnector\Request;
 
 use Etrias\AfterPayConnector\Type\CheckoutCustomer;
 use Etrias\AfterPayConnector\Type\Order;
+use Etrias\AfterPayConnector\Type\ReferencesTrait;
 
 trait AuthorizeRequestTrait
 {
+    use ReferencesTrait;
+
     /** @var null|CheckoutCustomer */
     public $customer;
 
@@ -17,10 +20,4 @@ trait AuthorizeRequestTrait
 
     /** @var null|Order */
     public $order;
-
-    /** @var null|string */
-    public $ourReference;
-
-    /** @var null|string */
-    public $yourReference;
 }

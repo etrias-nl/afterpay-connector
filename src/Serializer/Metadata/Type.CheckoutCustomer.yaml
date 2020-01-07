@@ -1,4 +1,24 @@
 Etrias\AfterPayConnector\Type\CheckoutCustomer:
   properties:
+    customerCategory:
+      type: string
     birthDate:
-      type: DateTimeImmutable<'Y-m-d'>
+      type: DateTimeImmutable<'Y-m-d', null, 'Y-m-d\TH:i:sP'>
+    email:
+      type: string
+    identificationNumber:
+      type: string
+    salutation:
+      type: string
+    address:
+      type: Etrias\AfterPayConnector\Type\Address
+    companyName:
+      type: string
+    customerNumber:
+      type: string
+    firstName:
+      type: string
+    lastName:
+      type: string
+    phone:
+      type: string

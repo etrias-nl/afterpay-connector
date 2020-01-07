@@ -1,0 +1,4 @@
+Etrias\AfterPayConnector\Type\Payment:
+  properties:
+    type:
+      type: string

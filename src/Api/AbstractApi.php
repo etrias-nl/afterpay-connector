@@ -35,7 +35,7 @@ abstract class AbstractApi
         $this->uriFactory = $uriFactory ?? Psr17FactoryDiscovery::findUrlFactory();
     }
 
-    protected function postJsonRequest(UriInterface $uri, object $data): ResponseInterface
+    protected function postJson(UriInterface $uri, object $data): ResponseInterface
     {
         return $this->client->post(
             $uri,
@@ -47,7 +47,17 @@ abstract class AbstractApi
         );
     }
 
-    protected function fromJsonResponse(ResponseInterface $response, string $type): object
+    protected function getJson(UriInterface $uri): ResponseInterface
+    {
+        return $this->client->get(
+            $uri,
+            [
+                'Accept' => self::JSON_CONTENT_TYPE,
+            ]
+        );
+    }
+
+    protected function deserialize(ResponseInterface $response, string $type): object
     {
         return $this->serializer->deserialize((string) $response->getBody(), $type, self::JSON_FORMAT);
     }

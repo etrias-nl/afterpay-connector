@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Etrias\AfterPayConnector\Type;
 
-class CustomerRisk
+class CaptureItem
 {
-    /** @var null|string */
-    public $ipAddress;
+    use OrderItemTrait;
 }

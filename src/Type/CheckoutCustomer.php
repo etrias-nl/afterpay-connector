@@ -25,9 +25,6 @@ class CheckoutCustomer
     /** @var null|string */
     public $identificationNumber;
 
-    /** @var null|CustomerRisk */
-    public $riskData;
-
     /** @var null|string */
     public $salutation;
 

@@ -1,0 +1,28 @@
+Etrias\AfterPayConnector\Type\Refund:
+  properties:
+    amount:
+      type: string
+    balance:
+      type: string
+    captureNumber:
+      type: string
+    currency:
+      type: string
+    customerNumber:
+      type: string
+    insertedAt:
+      type: DateTimeImmutable
+    orderNumber:
+      type: string
+    refundItems:
+      type: array<Etrias\AfterPayConnector\Type\RefundItem>
+    refundNumber:
+      type: string
+    reservationId:
+      type: string
+    updatedAt:
+      type: DateTimeImmutable
+    ourReference:
+      type: string
+    yourReference:
+      type: string

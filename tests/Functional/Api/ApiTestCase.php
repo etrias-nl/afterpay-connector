@@ -10,8 +10,9 @@ use Etrias\AfterPayConnector\HttpClient\Plugin\Authentication;
 use Etrias\AfterPayConnector\HttpClient\Plugin\ErrorHandler;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
+use Etrias\AfterPayConnector\Request\RefundOrderRequest;
+use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
 use Http\Client\Common\HttpMethodsClient;
-use Http\Client\Common\HttpMethodsClientInterface;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Http\Client\Common\Plugin\ErrorPlugin;
 use Http\Client\Common\PluginClient;
@@ -20,20 +21,19 @@ use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
 use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\SerializerInterface;
 use PHPUnit\Framework\TestCase;
 
 abstract class ApiTestCase extends TestCase
 {
-    /** @var SerializerInterface */
-    protected $serializer;
+    /** @var CheckoutApi */
+    protected $checkoutApi;
 
-    /** @var HttpMethodsClientInterface */
-    protected $client;
+    /** @var OrderApi */
+    protected $orderApi;
 
     protected function setUp(): void
     {
-        $this->serializer = SerializerBuilder::create()
+        $serializer = SerializerBuilder::create()
             ->setCacheDir(sys_get_temp_dir().'/jms-cache')
             ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
             ->addMetadataDir(__DIR__.'/../../../src/Serializer/Metadata', 'Etrias\AfterPayConnector')
@@ -42,16 +42,18 @@ abstract class ApiTestCase extends TestCase
             ->addDefaultHandlers()
             ->build()
         ;
-
-        $this->client = new HttpMethodsClient(
+        $client = new HttpMethodsClient(
             new PluginClient(HttpClientDiscovery::find(), [
                 new ErrorPlugin(['only_server_exception' => true]),
-                new ErrorHandler($this->serializer),
+                new ErrorHandler($serializer),
                 new BaseUriPlugin(Psr17FactoryDiscovery::findUrlFactory()->createUri(getenv('AFTERPAY_API_BASE_URI'))),
                 new Authentication(getenv('AFTERPAY_API_KEY')),
             ]),
             new GuzzleMessageFactory()
         );
+
+        $this->checkoutApi = new CheckoutApi($client, $serializer);
+        $this->orderApi = new OrderApi($client, $serializer);
     }
 
     protected function checkout(string $orderNumber): string
@@ -60,7 +62,15 @@ abstract class ApiTestCase extends TestCase
         $request->customer = TestData::checkoutCustomer();
         $request->order = TestData::order($orderNumber);
 
-        return (new CheckoutApi($this->client, $this->serializer))->authorizePayment($request)->checkoutId;
+        return $this->checkoutApi->authorizePayment($request)->checkoutId;
+    }
+
+    protected function cancel(string $orderNumber): void
+    {
+        $request = new VoidAuthorizationRequest();
+        $request->cancellationDetails = TestData::orderSummary();
+
+        $this->orderApi->voidAuthorization($orderNumber, $request);
     }
 
     protected function capture(string $orderNumber): string
@@ -68,6 +78,18 @@ abstract class ApiTestCase extends TestCase
         $request = new CaptureRequest();
         $request->orderDetails = TestData::orderSummary();
 
-        return (new OrderApi($this->client, $this->serializer))->capturePayment($orderNumber, $request)->captureNumber;
+        return $this->orderApi->capturePayment($orderNumber, $request)->captureNumber;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function refund(string $orderNumber, string $captureNumber): array
+    {
+        $request = RefundOrderRequest::forRefund($captureNumber)
+            ->withItems(TestData::refundOrderItem())
+        ;
+
+        return $this->orderApi->refundPayment($orderNumber, $request)->refundNumbers;
     }
 }
