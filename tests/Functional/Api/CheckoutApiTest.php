@@ -7,8 +7,7 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 use Etrias\AfterPayConnector\Api\CheckoutApi;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
 use Etrias\AfterPayConnector\Request\AvailablePaymentMethodsRequest;
-use Etrias\AfterPayConnector\Response\AuthorizePaymentResponse;
-use Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse;
+use Etrias\AfterPayConnector\Type\Outcome;
 
 /**
  * @internal
@@ -33,7 +32,7 @@ final class CheckoutApiTest extends ApiTestCase
 
         $response = $this->api->authorizePayment($request);
 
-        self::assertSame(AuthorizePaymentResponse::OUTCOME_ACCEPTED, $response->outcome);
+        self::assertSame(Outcome::ACCEPTED, $response->outcome);
         self::assertSame('John', $response->customer->firstName);
         self::assertSame('Doe 😁', $response->customer->lastName);
         self::assertSame('NL', $response->customer->addressList[0]->countryCode);
@@ -50,7 +49,7 @@ final class CheckoutApiTest extends ApiTestCase
 
         $response = $this->api->getAvailablePaymentMethods($request);
 
-        self::assertSame(AvailablePaymentMethodsResponse::OUTCOME_ACCEPTED, $response->outcome);
+        self::assertSame(Outcome::ACCEPTED, $response->outcome);
         self::assertSame('John', $response->customer->firstName);
         self::assertSame('Doe 😁', $response->customer->lastName);
         self::assertSame('NL', $response->customer->addressList[0]->countryCode);

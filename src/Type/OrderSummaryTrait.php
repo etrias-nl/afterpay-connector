@@ -27,7 +27,7 @@ trait OrderSummaryTrait
         $order->totalGrossAmount = .0;
         $order->totalNetAmount = .0;
 
-        foreach ($order->items as $item) {
+        foreach ($items as $item) {
             $order->items[] = $item;
             $order->totalGrossAmount += $item->grossUnitPrice * $item->quantity;
             $order->totalNetAmount += $item->netUnitPrice * $item->quantity;

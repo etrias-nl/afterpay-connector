@@ -44,6 +44,6 @@ class ResponseMessage
             $message .= ' ('.json_encode($labels).')';
         }
 
-        return null === $this->fieldReference ? $message : 'Error for field "'.$this->fieldReference.'": '.$message;
+        return null === $this->fieldReference || '' === $this->fieldReference ? $message : 'Error for field "'.$this->fieldReference.'": '.$message;
     }
 }

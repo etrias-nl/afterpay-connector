@@ -38,25 +38,21 @@ class OrderItem
     }
 
     /**
-     * @param null|float|int|string $grossUnitPrice
      * @param null|float|int|string $netUnitPrice
+     * @param null|float|int|string $vatAmount
+     * @param null|float|int|string $vatPercent
      */
-    public function withPrice($grossUnitPrice, $netUnitPrice): self
+    public function withPrice($netUnitPrice, $vatAmount, $vatPercent): self
     {
-        $this->grossUnitPrice = $grossUnitPrice;
         $this->netUnitPrice = $netUnitPrice;
-
-        return $this;
-    }
-
-    /**
-     * @param null|float|int|string $amount
-     * @param null|float|int|string $percent
-     */
-    public function withVat($amount, $percent): self
-    {
-        $this->vatAmount = $amount;
-        $this->vatPercent = $percent;
+        $this->vatAmount = $vatAmount;
+        $this->vatPercent = $vatPercent;
+        $this->grossUnitPrice = $netUnitPrice;
+        if (null !== $this->grossUnitPrice) {
+            $this->grossUnitPrice += $vatAmount ?? 0;
+        } elseif (null !== $vatAmount) {
+            $this->grossUnitPrice = $vatAmount;
+        }
 
         return $this;
     }

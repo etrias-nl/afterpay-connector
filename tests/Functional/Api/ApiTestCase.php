@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
+use Etrias\AfterPayConnector\Api\CheckoutApi;
 use Etrias\AfterPayConnector\HttpClient\Plugin\Authentication;
 use Etrias\AfterPayConnector\HttpClient\Plugin\ErrorHandler;
+use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Common\HttpMethodsClientInterface;
 use Http\Client\Common\Plugin\BaseUriPlugin;
@@ -48,5 +50,14 @@ abstract class ApiTestCase extends TestCase
             ]),
             new GuzzleMessageFactory()
         );
+    }
+
+    protected function checkout(string $orderNumber): string
+    {
+        $request = AuthorizePaymentRequest::forInvoice();
+        $request->customer = TestData::checkoutCustomer();
+        $request->order = TestData::order($orderNumber);
+
+        return (new CheckoutApi($this->client, $this->serializer))->authorizePayment($request)->checkoutId;
     }
 }
