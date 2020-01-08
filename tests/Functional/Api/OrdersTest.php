@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Exception\AfterPayException;
+use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
+use Etrias\AfterPayConnector\Request\AvailablePaymentMethodsRequest;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\UpdateOrderRequest;
@@ -22,8 +24,42 @@ use Etrias\AfterPayConnector\Type\RefundItem;
 /**
  * @internal
  */
-final class OrderApiTest extends ApiTestCase
+final class OrdersTest extends ApiTestCase
 {
+    public function testAuthorizePayment(): void
+    {
+        $request = AuthorizePaymentRequest::forInvoice();
+        $request->customer = TestData::checkoutCustomer();
+        $request->order = TestData::order();
+
+        $response = $this->orders->authorizePayment($request);
+
+        self::assertSame(Outcome::ACCEPTED, $response->outcome);
+        self::assertSame('John', $response->customer->firstName);
+        self::assertSame('Doe 😁', $response->customer->lastName);
+        self::assertSame('NL', $response->customer->addressList[0]->countryCode);
+        self::assertNull($response->deliveryCustomer);
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
+    }
+
+    public function testAvailablePaymentMethods(): void
+    {
+        $request = new AvailablePaymentMethodsRequest();
+        $request->customer = TestData::checkoutCustomer();
+        $request->order = TestData::order();
+
+        $response = $this->orders->getAvailablePaymentMethods($request);
+
+        self::assertSame(Outcome::ACCEPTED, $response->outcome);
+        self::assertSame('John', $response->customer->firstName);
+        self::assertSame('Doe 😁', $response->customer->lastName);
+        self::assertSame('NL', $response->customer->addressList[0]->countryCode);
+        self::assertNull($response->deliveryCustomer);
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
+        self::assertIsString($response->paymentMethods[0]->title);
+    }
+
     public function testCapturePayment(): void
     {
         $this->checkout($orderNumber = TestData::orderNumber());
@@ -31,7 +67,7 @@ final class OrderApiTest extends ApiTestCase
         $request = new CaptureRequest();
         $request->orderDetails = TestData::orderSummary();
 
-        $response = $this->orderApi->capturePayment($orderNumber, $request);
+        $response = $this->orders->capturePayment($orderNumber, $request);
 
         self::assertSame('38', $response->authorizedAmount);
         self::assertSame('38', $response->capturedAmount);
@@ -46,7 +82,7 @@ final class OrderApiTest extends ApiTestCase
 
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->capturePayment('UNKNOWN', $request);
+        $this->orders->capturePayment('UNKNOWN', $request);
     }
 
     public function testVoidAuthorization(): void
@@ -56,7 +92,7 @@ final class OrderApiTest extends ApiTestCase
         $request = new VoidAuthorizationRequest();
         $request->cancellationDetails = TestData::orderSummary();
 
-        $response = $this->orderApi->voidAuthorization($orderNumber, $request);
+        $response = $this->orders->voidAuthorization($orderNumber, $request);
 
         self::assertSame('0', $response->remainingAuthorizedAmount);
         self::assertSame('38', $response->totalAuthorizedAmount);
@@ -72,7 +108,7 @@ final class OrderApiTest extends ApiTestCase
             ->withItems(TestData::refundOrderItem())
         ;
 
-        $response = $this->orderApi->refundPayment($orderNumber, $request);
+        $response = $this->orders->refundPayment($orderNumber, $request);
 
         self::assertIsString($response->refundNumbers[0]);
         self::assertSame('38', $response->totalAuthorizedAmount);
@@ -84,7 +120,7 @@ final class OrderApiTest extends ApiTestCase
     {
         $this->checkout($orderNumber = TestData::orderNumber());
 
-        $response = $this->orderApi->getOrder($orderNumber);
+        $response = $this->orders->getOrder($orderNumber);
 
         self::assertSame([], $response->cancellations);
         self::assertSame([], $response->captures);
@@ -108,7 +144,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $this->cancel($orderNumber);
 
-        $response = $this->orderApi->getOrder($orderNumber);
+        $response = $this->orders->getOrder($orderNumber);
 
         self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
         self::assertSame('38', $response->cancellations[0]->cancellationAmount);
@@ -126,7 +162,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $captureNumber = $this->capture($orderNumber);
 
-        $response = $this->orderApi->getOrder($orderNumber);
+        $response = $this->orders->getOrder($orderNumber);
 
         self::assertSame([], $response->cancellations);
         self::assertInstanceOf(Capture::class, $response->captures[0]);
@@ -155,7 +191,7 @@ final class OrderApiTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
-        $response = $this->orderApi->getOrder($orderNumber);
+        $response = $this->orders->getOrder($orderNumber);
 
         self::assertSame([], $response->cancellations);
         self::assertInstanceOf(Refund::class, $response->refunds[0]);
@@ -178,7 +214,7 @@ final class OrderApiTest extends ApiTestCase
     {
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getOrder('UNKNOWN');
+        $this->orders->getOrder('UNKNOWN');
     }
 
     public function testGetVoids(): void
@@ -186,7 +222,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $this->cancel($orderNumber);
 
-        $response = $this->orderApi->getVoids($orderNumber);
+        $response = $this->orders->getVoids($orderNumber);
 
         self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
         self::assertSame('38', $response->cancellations[0]->cancellationAmount);
@@ -201,7 +237,7 @@ final class OrderApiTest extends ApiTestCase
     {
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getVoids('UNKNOWN');
+        $this->orders->getVoids('UNKNOWN');
     }
 
     public function testGetVoid(): void
@@ -209,7 +245,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $this->cancel($orderNumber);
 
-        $response = $this->orderApi->getVoid($orderNumber, $this->orderApi->getVoids($orderNumber)->cancellations[0]->cancellationNo);
+        $response = $this->orders->getVoid($orderNumber, $this->orders->getVoids($orderNumber)->cancellations[0]->cancellationNo);
 
         self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
         self::assertSame('38', $response->cancellations[0]->cancellationAmount);
@@ -226,7 +262,7 @@ final class OrderApiTest extends ApiTestCase
 
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getVoid($orderNumber, 'UNKNOWN');
+        $this->orders->getVoid($orderNumber, 'UNKNOWN');
     }
 
     public function testGetRefunds(): void
@@ -235,7 +271,7 @@ final class OrderApiTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
-        $response = $this->orderApi->getRefunds($orderNumber);
+        $response = $this->orders->getRefunds($orderNumber);
 
         self::assertInstanceOf(Refund::class, $response->refunds[0]);
         self::assertSame('-12.5', $response->refunds[0]->amount);
@@ -257,7 +293,7 @@ final class OrderApiTest extends ApiTestCase
     {
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getRefunds('UNKNOWN');
+        $this->orders->getRefunds('UNKNOWN');
     }
 
     public function testGetRefund(): void
@@ -266,7 +302,7 @@ final class OrderApiTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
-        $response = $this->orderApi->getRefund($orderNumber, $refundNumbers[0]);
+        $response = $this->orders->getRefund($orderNumber, $refundNumbers[0]);
 
         self::assertInstanceOf(Refund::class, $response->refunds[0]);
         self::assertSame('-12.5', $response->refunds[0]->amount);
@@ -290,7 +326,7 @@ final class OrderApiTest extends ApiTestCase
 
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getRefund($orderNumber, 'UNKNOWN');
+        $this->orders->getRefund($orderNumber, 'UNKNOWN');
     }
 
     public function testGetCaptures(): void
@@ -298,7 +334,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $captureNumber = $this->capture($orderNumber);
 
-        $response = $this->orderApi->getCaptures($orderNumber);
+        $response = $this->orders->getCaptures($orderNumber);
 
         self::assertInstanceOf(Capture::class, $response->captures[0]);
         self::assertSame('38', $response->captures[0]->amount);
@@ -323,7 +359,7 @@ final class OrderApiTest extends ApiTestCase
     {
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getCaptures('UNKNOWN');
+        $this->orders->getCaptures('UNKNOWN');
     }
 
     public function testGetCapture(): void
@@ -331,7 +367,7 @@ final class OrderApiTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $captureNumber = $this->capture($orderNumber);
 
-        $response = $this->orderApi->getCapture($orderNumber, $captureNumber);
+        $response = $this->orders->getCapture($orderNumber, $captureNumber);
 
         self::assertInstanceOf(Capture::class, $response->captures[0]);
         self::assertSame('38', $response->captures[0]->amount);
@@ -358,26 +394,26 @@ final class OrderApiTest extends ApiTestCase
 
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->getCapture($orderNumber, 'UNKNOWN');
+        $this->orders->getCapture($orderNumber, 'UNKNOWN');
     }
 
     public function testUpdateOrder(): void
     {
         $this->checkout($orderNumber = TestData::orderNumber());
 
-        self::assertSame(TestData::orderItems()[0]->description, $this->orderApi->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+        self::assertSame(TestData::orderItems()[0]->description, $this->orders->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
 
         $request = new UpdateOrderRequest();
         $request->updateOrderSummary = TestData::orderSummary();
         $request->updateOrderSummary->items[0]->description .= ' MODIFIED';
 
-        $response = $this->orderApi->updateOrder($orderNumber, $request);
+        $response = $this->orders->updateOrder($orderNumber, $request);
 
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
         self::assertInstanceOf(\DateTimeImmutable::class, $response->expirationDate);
         self::assertSame(Outcome::ACCEPTED, $response->outcome);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
-        self::assertSame(TestData::orderItems()[0]->description.' MODIFIED', $this->orderApi->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+        self::assertSame(TestData::orderItems()[0]->description.' MODIFIED', $this->orders->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
     }
 
     public function testUpdateOrderWithUnknownNumber(): void
@@ -387,6 +423,6 @@ final class OrderApiTest extends ApiTestCase
 
         $this->expectException(AfterPayException::class);
 
-        $this->orderApi->updateOrder('UNKNOWN', $request);
+        $this->orders->updateOrder('UNKNOWN', $request);
     }
 }

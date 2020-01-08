@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
-use Etrias\AfterPayConnector\Api\CheckoutApi;
-use Etrias\AfterPayConnector\Api\OrderApi;
+use Etrias\AfterPayConnector\Api\Orders;
 use Etrias\AfterPayConnector\HttpClient\Plugin\Authentication;
 use Etrias\AfterPayConnector\HttpClient\Plugin\ErrorHandler;
 use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
@@ -25,11 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 abstract class ApiTestCase extends TestCase
 {
-    /** @var CheckoutApi */
-    protected $checkoutApi;
-
-    /** @var OrderApi */
-    protected $orderApi;
+    /** @var Orders */
+    protected $orders;
 
     protected function setUp(): void
     {
@@ -52,8 +48,7 @@ abstract class ApiTestCase extends TestCase
             new GuzzleMessageFactory()
         );
 
-        $this->checkoutApi = new CheckoutApi($client, $serializer);
-        $this->orderApi = new OrderApi($client, $serializer);
+        $this->orders = new Orders($client, $serializer);
     }
 
     protected function checkout(string $orderNumber): string
@@ -62,7 +57,7 @@ abstract class ApiTestCase extends TestCase
         $request->customer = TestData::checkoutCustomer();
         $request->order = TestData::order($orderNumber);
 
-        return $this->checkoutApi->authorizePayment($request)->checkoutId;
+        return $this->orders->authorizePayment($request)->checkoutId;
     }
 
     protected function cancel(string $orderNumber): void
@@ -70,7 +65,7 @@ abstract class ApiTestCase extends TestCase
         $request = new VoidAuthorizationRequest();
         $request->cancellationDetails = TestData::orderSummary();
 
-        $this->orderApi->voidAuthorization($orderNumber, $request);
+        $this->orders->voidAuthorization($orderNumber, $request);
     }
 
     protected function capture(string $orderNumber): string
@@ -78,7 +73,7 @@ abstract class ApiTestCase extends TestCase
         $request = new CaptureRequest();
         $request->orderDetails = TestData::orderSummary();
 
-        return $this->orderApi->capturePayment($orderNumber, $request)->captureNumber;
+        return $this->orders->capturePayment($orderNumber, $request)->captureNumber;
     }
 
     /**
@@ -90,6 +85,6 @@ abstract class ApiTestCase extends TestCase
             ->withItems(TestData::refundOrderItem())
         ;
 
-        return $this->orderApi->refundPayment($orderNumber, $request)->refundNumbers;
+        return $this->orders->refundPayment($orderNumber, $request)->refundNumbers;
     }
 }

@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Etrias\AfterPayConnector\Api;
 
+use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
+use Etrias\AfterPayConnector\Request\AvailablePaymentMethodsRequest;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\UpdateOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
+use Etrias\AfterPayConnector\Response\AuthorizePaymentResponse;
+use Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse;
 use Etrias\AfterPayConnector\Response\CaptureResponse;
 use Etrias\AfterPayConnector\Response\GetAllCapturesResponse;
 use Etrias\AfterPayConnector\Response\GetAllRefundsResponse;
@@ -17,8 +21,24 @@ use Etrias\AfterPayConnector\Response\RefundOrderResponse;
 use Etrias\AfterPayConnector\Response\UpdateOrderResponse;
 use Etrias\AfterPayConnector\Response\VoidAuthorizationResponse;
 
-class OrderApi extends AbstractApi
+class Orders extends AbstractApi
 {
+    public function authorizePayment(AuthorizePaymentRequest $request): AuthorizePaymentResponse
+    {
+        $uri = $this->uriFactory->createUri('/checkout/authorize');
+        $response = $this->postJson($uri, $request);
+
+        return $this->deserialize($response, AuthorizePaymentResponse::class);
+    }
+
+    public function getAvailablePaymentMethods(AvailablePaymentMethodsRequest $request): AvailablePaymentMethodsResponse
+    {
+        $uri = $this->uriFactory->createUri('/checkout/payment-methods');
+        $response = $this->postJson($uri, $request);
+
+        return $this->deserialize($response, AvailablePaymentMethodsResponse::class);
+    }
+
     public function capturePayment(string $orderNumber, CaptureRequest $request): CaptureResponse
     {
         $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures', compact('orderNumber')));
