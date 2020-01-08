@@ -16,7 +16,7 @@ abstract class TestData
     public static function checkoutCustomer(): CheckoutCustomer
     {
         $customer = CheckoutCustomer::forPerson('john.doe@domain.test')
-            ->withName(CheckoutCustomer::SALUTATION_MR, 'John', 'Doe 😁')
+            ->withFullName(CheckoutCustomer::SALUTATION_MR, 'John', 'Doe 😁')
             ->withBirthDate(28, 7, 1987)
         ;
         $customer->address = self::address();

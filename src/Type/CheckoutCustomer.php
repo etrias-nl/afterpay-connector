@@ -55,15 +55,16 @@ class CheckoutCustomer
         return $object;
     }
 
-    public static function forCompany(): self
+    public static function forCompany(?string $companyName = null): self
     {
         $object = new self();
         $object->customerCategory = self::CATEGORY_COMPANY;
+        $object->companyName = $companyName;
 
         return $object;
     }
 
-    public function withName(?string $salutation, ?string $firstName, ?string $lastName): self
+    public function withFullName(?string $salutation, ?string $firstName, ?string $lastName): self
     {
         $this->salutation = $salutation;
         $this->firstName = $firstName;
