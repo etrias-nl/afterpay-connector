@@ -2,13 +2,19 @@ Etrias\AfterPayConnector\Type\ResponseMessage:
   properties:
     type:
       type: string
+      serialized_name: type
     code:
       type: string
+      serialized_name: code
     actionCode:
       type: string
+      serialized_name: actionCode
     message:
       type: string
+      serialized_name: message
     customerFacingMessage:
       type: string
+      serialized_name: customerFacingMessage
     fieldReference:
       type: string
+      serialized_name: fieldReference

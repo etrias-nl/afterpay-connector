@@ -12,10 +12,10 @@ class ResponseOrderDetails
     /** @var null|CheckoutCustomer */
     public $customer;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $expirationDate;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $insertedAt;
 
     /** @var null|string */
@@ -33,6 +33,6 @@ class ResponseOrderDetails
     /** @var null|float|int|string */
     public $totalNetAmount;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $updatedAt;
 }

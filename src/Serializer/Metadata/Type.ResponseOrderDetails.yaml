@@ -2,21 +2,31 @@ Etrias\AfterPayConnector\Type\ResponseOrderDetails:
   properties:
     currency:
       type: string
+      serialized_name: currency
     customer:
       type: Etrias\AfterPayConnector\Type\CheckoutCustomer
+      serialized_name: customer
     expirationDate:
-      type: DateTimeImmutable<null, null, 'Y-m-d'>
+      type: DateTime<null, null, 'Y-m-d'>
+      serialized_name: expirationDate
     insertedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: insertedAt
     orderId:
       type: string
+      serialized_name: orderId
     orderItems:
       type: array<Etrias\AfterPayConnector\Type\OrderItemExtended>
+      serialized_name: orderItems
     orderNumber:
       type: string
+      serialized_name: orderNumber
     totalGrossAmount:
       type: string
+      serialized_name: totalGrossAmount
     totalNetAmount:
       type: string
+      serialized_name: totalNetAmount
     updatedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: updatedAt

@@ -2,17 +2,25 @@ Etrias\AfterPayConnector\Type\CancellationItem:
   properties:
     description:
       type: string
+      serialized_name: description
     grossUnitPrice:
       type: string
+      serialized_name: grossUnitPrice
     netUnitPrice:
       type: string
+      serialized_name: netUnitPrice
     productId:
       type: string
+      serialized_name: productId
     quantity:
       type: string
+      serialized_name: quantity
     vatAmount:
       type: string
+      serialized_name: vatAmount
     vatPercent:
       type: string
+      serialized_name: vatPercent
     cancellationNumber:
       type: string
+      serialized_name: cancellationNumber

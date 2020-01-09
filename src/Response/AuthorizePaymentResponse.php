@@ -11,6 +11,6 @@ class AuthorizePaymentResponse
     /** @var null|string */
     public $reservationId;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $expirationDate;
 }

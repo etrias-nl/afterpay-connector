@@ -2,11 +2,16 @@ Etrias\AfterPayConnector\Response\GetOrderResponse:
   properties:
     cancellations:
       type: array<Etrias\AfterPayConnector\Type\Cancellation>
+      serialized_name: cancellations
     captures:
       type: array<Etrias\AfterPayConnector\Type\Capture>
+      serialized_name: captures
     orderDetails:
       type: Etrias\AfterPayConnector\Type\ResponseOrderDetails
+      serialized_name: orderDetails
     payment:
       type: Etrias\AfterPayConnector\Type\Payment
+      serialized_name: payment
     refunds:
       type: array<Etrias\AfterPayConnector\Type\Refund>
+      serialized_name: refunds

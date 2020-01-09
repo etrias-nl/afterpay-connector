@@ -2,3 +2,4 @@ Etrias\AfterPayConnector\Response\GetAllRefundsResponse:
   properties:
     refunds:
       type: array<Etrias\AfterPayConnector\Type\Refund>
+      serialized_name: refunds

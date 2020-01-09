@@ -2,13 +2,19 @@ Etrias\AfterPayConnector\Type\Address:
   properties:
     countryCode:
       type: string
+      serialized_name: countryCode
     postalCode:
       type: string
+      serialized_name: postalCode
     postalPlace:
       type: string
+      serialized_name: postalPlace
     street:
       type: string
+      serialized_name: street
     streetNumber:
       type: string
+      serialized_name: streetNumber
     streetNumberAdditional:
       type: string
+      serialized_name: streetNumberAdditional

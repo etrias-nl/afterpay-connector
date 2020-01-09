@@ -125,8 +125,8 @@ final class OrdersTest extends ApiTestCase
         self::assertSame([], $response->cancellations);
         self::assertSame([], $response->captures);
         self::assertSame('EUR', $response->orderDetails->currency);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->orderDetails->expirationDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->orderDetails->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->orderDetails->expirationDate);
+        self::assertInstanceOf(\DateTime::class, $response->orderDetails->insertedAt);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->orderDetails->orderId);
         self::assertInstanceOf(OrderItemExtended::class, $response->orderDetails->orderItems[0]);
         self::assertSame(TestData::orderItems()[0]->productId, $response->orderDetails->orderItems[0]->productId);
@@ -134,7 +134,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame($orderNumber, $response->orderDetails->orderNumber);
         self::assertSame('38', $response->orderDetails->totalGrossAmount);
         self::assertSame('26.5', $response->orderDetails->totalNetAmount);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->orderDetails->updatedAt);
+        self::assertInstanceOf(\DateTime::class, $response->orderDetails->updatedAt);
         self::assertInstanceOf(Payment::class, $response->payment);
         self::assertSame([], $response->refunds);
     }
@@ -175,9 +175,9 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('EUR', $response->captures[0]->currency);
         self::assertSame('', $response->captures[0]->customerNumber);
         self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
         self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->orderDate);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
         self::assertSame($orderNumber, $response->captures[0]->orderNumber);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
         self::assertSame('0', $response->captures[0]->totalRefundedAmount);
@@ -200,7 +200,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
         self::assertSame('EUR', $response->refunds[0]->currency);
         self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->refunds[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
         self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
         self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
         self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
@@ -279,7 +279,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
         self::assertSame('EUR', $response->refunds[0]->currency);
         self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->refunds[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
         self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
         self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
         self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
@@ -310,7 +310,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
         self::assertSame('EUR', $response->refunds[0]->currency);
         self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->refunds[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
         self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
         self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
         self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
@@ -346,9 +346,9 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('EUR', $response->captures[0]->currency);
         self::assertSame('', $response->captures[0]->customerNumber);
         self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
         self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->orderDate);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
         self::assertSame($orderNumber, $response->captures[0]->orderNumber);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
         self::assertSame('0', $response->captures[0]->totalRefundedAmount);
@@ -379,9 +379,9 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('EUR', $response->captures[0]->currency);
         self::assertSame('', $response->captures[0]->customerNumber);
         self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->insertedAt);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
         self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->captures[0]->orderDate);
+        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
         self::assertSame($orderNumber, $response->captures[0]->orderNumber);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
         self::assertSame('0', $response->captures[0]->totalRefundedAmount);
@@ -410,7 +410,7 @@ final class OrdersTest extends ApiTestCase
         $response = $this->orders->updateOrder($orderNumber, $request);
 
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
-        self::assertInstanceOf(\DateTimeImmutable::class, $response->expirationDate);
+        self::assertInstanceOf(\DateTime::class, $response->expirationDate);
         self::assertSame(Outcome::ACCEPTED, $response->outcome);
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
         self::assertSame(TestData::orderItems()[0]->description.' MODIFIED', $this->orders->getOrder($orderNumber)->orderDetails->orderItems[0]->description);

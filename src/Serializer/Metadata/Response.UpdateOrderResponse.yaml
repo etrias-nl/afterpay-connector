@@ -2,9 +2,13 @@ Etrias\AfterPayConnector\Response\UpdateOrderResponse:
   properties:
     checkoutId:
       type: string
+      serialized_name: checkoutId
     expirationDate:
-      type: DateTimeImmutable<null, null, 'Y-m-d'>
+      type: DateTime<null, null, 'Y-m-d'>
+      serialized_name: expirationDate
     outcome:
       type: string
+      serialized_name: outcome
     reservationId:
       type: string
+      serialized_name: reservationId

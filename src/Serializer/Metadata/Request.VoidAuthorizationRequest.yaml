@@ -1,0 +1,8 @@
+Etrias\AfterPayConnector\Request\VoidAuthorizationRequest:
+  properties:
+    cancellationDetails:
+      type: Etrias\AfterPayConnector\Type\OrderSummary
+      serialized_name: cancellationDetails
+    merchantId:
+      type: string
+      serialized_name: merchantId

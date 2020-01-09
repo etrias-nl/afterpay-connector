@@ -1,0 +1,17 @@
+Etrias\AfterPayConnector\Request\RefundOrderRequest:
+  properties:
+    captureNumber:
+      type: string
+      serialized_name: captureNumber
+    items:
+      type: array<Etrias\AfterPayConnector\Type\RefundOrderItem>
+      serialized_name: items
+    creditNoteNumber:
+      type: string
+      serialized_name: creditNoteNumber
+    merchantId:
+      type: string
+      serialized_name: merchantId
+    refundType:
+      type: string
+      serialized_name: refundType

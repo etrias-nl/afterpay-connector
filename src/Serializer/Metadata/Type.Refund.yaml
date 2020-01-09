@@ -2,27 +2,40 @@ Etrias\AfterPayConnector\Type\Refund:
   properties:
     amount:
       type: string
+      serialized_name: amount
     balance:
       type: string
+      serialized_name: balance
     captureNumber:
       type: string
+      serialized_name: captureNumber
     currency:
       type: string
+      serialized_name: currency
     customerNumber:
       type: string
+      serialized_name: customerNumber
     insertedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: insertedAt
     orderNumber:
       type: string
+      serialized_name: orderNumber
     refundItems:
       type: array<Etrias\AfterPayConnector\Type\RefundItem>
+      serialized_name: refundItems
     refundNumber:
       type: string
+      serialized_name: refundNumber
     reservationId:
       type: string
+      serialized_name: reservationId
     updatedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: updatedAt
     ourReference:
       type: string
+      serialized_name: ourReference
     yourReference:
       type: string
+      serialized_name: yourReference

@@ -2,23 +2,34 @@ Etrias\AfterPayConnector\Type\CheckoutCustomer:
   properties:
     customerCategory:
       type: string
+      serialized_name: customerCategory
     birthDate:
-      type: DateTimeImmutable<'Y-m-d', null, 'Y-m-d\TH:i:sP'>
+      type: DateTime<'Y-m-d', null, 'Y-m-d\TH:i:sP'>
+      serialized_name: birthDate
     email:
       type: string
+      serialized_name: email
     identificationNumber:
       type: string
+      serialized_name: identificationNumber
     salutation:
       type: string
+      serialized_name: salutation
     address:
       type: Etrias\AfterPayConnector\Type\Address
+      serialized_name: address
     companyName:
       type: string
+      serialized_name: companyName
     customerNumber:
       type: string
+      serialized_name: customerNumber
     firstName:
       type: string
+      serialized_name: firstName
     lastName:
       type: string
+      serialized_name: lastName
     phone:
       type: string
+      serialized_name: phone

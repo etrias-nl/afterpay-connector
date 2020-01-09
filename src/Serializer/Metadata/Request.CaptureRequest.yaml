@@ -1,0 +1,11 @@
+Etrias\AfterPayConnector\Request\CaptureRequest:
+  properties:
+    orderDetails:
+      type: Etrias\AfterPayConnector\Type\OrderSummary
+      serialized_name: orderDetails
+    invoiceNumber:
+      type: string
+      serialized_name: invoiceNumber
+    transactionReference:
+      type: string
+      serialized_name: transactionReference

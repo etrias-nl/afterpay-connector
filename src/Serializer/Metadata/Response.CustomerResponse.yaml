@@ -2,11 +2,16 @@ Etrias\AfterPayConnector\Response\CustomerResponse:
   properties:
     customerAccountId:
       type: string
+      serialized_name: customerAccountId
     customerNumber:
       type: string
+      serialized_name: customerNumber
     firstName:
       type: string
+      serialized_name: firstName
     lastName:
       type: string
+      serialized_name: lastName
     addressList:
       type: array<Etrias\AfterPayConnector\Type\Address>
+      serialized_name: addressList

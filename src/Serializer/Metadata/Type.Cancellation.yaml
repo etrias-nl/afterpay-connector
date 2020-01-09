@@ -2,7 +2,10 @@ Etrias\AfterPayConnector\Type\Cancellation:
   properties:
     cancellationAmount:
       type: string
+      serialized_name: cancellationAmount
     cancellationItems:
       type: array<Etrias\AfterPayConnector\Type\CancellationItem>
+      serialized_name: cancellationItems
     cancellationNo:
       type: string
+      serialized_name: cancellationNo

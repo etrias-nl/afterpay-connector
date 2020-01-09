@@ -9,7 +9,7 @@ class UpdateOrderResponse
     /** @var null|string */
     public $checkoutId;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $expirationDate;
 
     /** @var null|string */

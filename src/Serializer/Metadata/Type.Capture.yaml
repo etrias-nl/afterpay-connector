@@ -2,33 +2,49 @@ Etrias\AfterPayConnector\Type\Capture:
   properties:
     amount:
       type: string
+      serialized_name: amount
     balance:
       type: string
+      serialized_name: balance
     captureItems:
       type: array<Etrias\AfterPayConnector\Type\CaptureItem>
+      serialized_name: captureItems
     captureNumber:
       type: string
+      serialized_name: captureNumber
     currency:
       type: string
+      serialized_name: currency
     customerNumber:
       type: string
+      serialized_name: customerNumber
     dueDate:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: dueDate
     insertedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: insertedAt
     invoiceDate:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: invoiceDate
     orderDate:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: orderDate
     orderNumber:
       type: string
+      serialized_name: orderNumber
     reservationId:
       type: string
+      serialized_name: reservationId
     totalRefundedAmount:
       type: string
+      serialized_name: totalRefundedAmount
     updatedAt:
-      type: DateTimeImmutable
+      type: DateTime
+      serialized_name: updatedAt
     ourReference:
       type: string
+      serialized_name: ourReference
     yourReference:
       type: string
+      serialized_name: yourReference

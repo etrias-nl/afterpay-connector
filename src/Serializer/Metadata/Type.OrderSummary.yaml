@@ -1,0 +1,14 @@
+Etrias\AfterPayConnector\Type\OrderSummary:
+  properties:
+    totalGrossAmount:
+      type: string
+      serialized_name: totalGrossAmount
+    totalNetAmount:
+      type: string
+      serialized_name: totalNetAmount
+    currency:
+      type: string
+      serialized_name: currency
+    items:
+      type: array<Etrias\AfterPayConnector\Type\OrderItem>
+      serialized_name: items
