@@ -2,11 +2,16 @@ Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse:
   properties:
     outcome:
       type: string
+      serialized_name: outcome
     customer:
       type: Etrias\AfterPayConnector\Response\CustomerResponse
+      serialized_name: customer
     deliveryCustomer:
       type: Etrias\AfterPayConnector\Response\CustomerResponse
+      serialized_name: deliveryCustomer
     checkoutId:
       type: string
+      serialized_name: checkoutId
     paymentMethods:
       type: array<Etrias\AfterPayConnector\Type\PaymentMethod>
+      serialized_name: paymentMethods

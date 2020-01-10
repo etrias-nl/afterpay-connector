@@ -1,4 +1,4 @@
-Etrias\AfterPayConnector\Type\CaptureItem:
+Etrias\AfterPayConnector\Type\RefundOrderItem:
   properties:
     description:
       type: string

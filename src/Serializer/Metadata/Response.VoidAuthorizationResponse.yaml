@@ -2,7 +2,10 @@ Etrias\AfterPayConnector\Response\VoidAuthorizationResponse:
   properties:
     remainingAuthorizedAmount:
       type: string
+      serialized_name: remainingAuthorizedAmount
     totalAuthorizedAmount:
       type: string
+      serialized_name: totalAuthorizedAmount
     totalCapturedAmount:
       type: string
+      serialized_name: totalCapturedAmount

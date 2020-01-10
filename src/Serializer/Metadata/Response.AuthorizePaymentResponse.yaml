@@ -2,13 +2,19 @@ Etrias\AfterPayConnector\Response\AuthorizePaymentResponse:
   properties:
     outcome:
       type: string
+      serialized_name: outcome
     customer:
       type: Etrias\AfterPayConnector\Response\CustomerResponse
+      serialized_name: customer
     deliveryCustomer:
       type: Etrias\AfterPayConnector\Response\CustomerResponse
+      serialized_name: deliveryCustomer
     checkoutId:
       type: string
+      serialized_name: checkoutId
     reservationId:
       type: string
+      serialized_name: reservationId
     expirationDate:
-      type: DateTimeImmutable<null, null, 'Y-m-d'>
+      type: DateTime<null, null, 'Y-m-d'>
+      serialized_name: expirationDate

@@ -2,7 +2,10 @@ Etrias\AfterPayConnector\Type\PaymentMethod:
   properties:
     logo:
       type: string
+      serialized_name: logo
     tag:
       type: string
+      serialized_name: tag
     title:
       type: string
+      serialized_name: title

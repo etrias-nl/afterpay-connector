@@ -2,9 +2,13 @@ Etrias\AfterPayConnector\Response\CaptureResponse:
   properties:
     authorizedAmount:
       type: string
+      serialized_name: authorizedAmount
     capturedAmount:
       type: string
+      serialized_name: capturedAmount
     captureNumber:
       type: string
+      serialized_name: captureNumber
     remainingAuthorizedAmount:
       type: string
+      serialized_name: remainingAuthorizedAmount

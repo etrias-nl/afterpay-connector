@@ -16,7 +16,7 @@ class CheckoutCustomer
     /** @var null|string */
     public $customerCategory;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $birthDate;
 
     /** @var null|string */
@@ -75,7 +75,7 @@ class CheckoutCustomer
 
     public function withBirthDate(int $day, int $month, int $year): self
     {
-        $this->birthDate = (new \DateTimeImmutable())->setTimestamp(mktime(0, 0, 0, $month, $day, $year));
+        $this->birthDate = (new \DateTime())->setTimestamp(mktime(0, 0, 0, $month, $day, $year));
 
         return $this;
     }

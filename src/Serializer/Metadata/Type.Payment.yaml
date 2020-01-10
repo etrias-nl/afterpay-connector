@@ -2,3 +2,4 @@ Etrias\AfterPayConnector\Type\Payment:
   properties:
     type:
       type: string
+      serialized_name: type

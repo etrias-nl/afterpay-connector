@@ -1,0 +1,20 @@
+Etrias\AfterPayConnector\Request\AuthorizePaymentRequest:
+  properties:
+    customer:
+      type: Etrias\AfterPayConnector\Type\CheckoutCustomer
+      serialized_name: customer
+    deliveryCustomer:
+      type: Etrias\AfterPayConnector\Type\CheckoutCustomer
+      serialized_name: deliveryCustomer
+    order:
+      type: Etrias\AfterPayConnector\Type\Order
+      serialized_name: order
+    payment:
+      type: Etrias\AfterPayConnector\Type\Payment
+      serialized_name: payment
+    checkoutId:
+      type: string
+      serialized_name: checkoutId
+    merchantId:
+      type: string
+      serialized_name: merchantId

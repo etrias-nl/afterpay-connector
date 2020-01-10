@@ -1,4 +1,4 @@
-Etrias\AfterPayConnector\Type\CaptureItem:
+Etrias\AfterPayConnector\Type\OrderItem:
   properties:
     description:
       type: string

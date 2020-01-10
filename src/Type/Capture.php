@@ -26,16 +26,16 @@ class Capture
     /** @var null|string */
     public $customerNumber;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $dueDate;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $insertedAt;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $invoiceDate;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $orderDate;
 
     /** @var null|string */
@@ -47,6 +47,6 @@ class Capture
     /** @var null|float|int|string */
     public $totalRefundedAmount;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $updatedAt;
 }

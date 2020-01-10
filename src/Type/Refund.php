@@ -23,7 +23,7 @@ class Refund
     /** @var null|string */
     public $customerNumber;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $insertedAt;
 
     /** @var null|string */
@@ -38,6 +38,6 @@ class Refund
     /** @var null|string */
     public $reservationId;
 
-    /** @var null|\DateTimeInterface */
+    /** @var null|\DateTime */
     public $updatedAt;
 }

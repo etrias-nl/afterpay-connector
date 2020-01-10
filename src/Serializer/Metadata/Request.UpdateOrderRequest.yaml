@@ -1,0 +1,11 @@
+Etrias\AfterPayConnector\Request\UpdateOrderRequest:
+  properties:
+    updateOrderSummary:
+      type: Etrias\AfterPayConnector\Type\OrderSummary
+      serialized_name: updateOrderSummary
+    ourReference:
+      type: string
+      serialized_name: ourReference
+    yourReference:
+      type: string
+      serialized_name: yourReference
