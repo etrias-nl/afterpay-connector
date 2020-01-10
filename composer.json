@@ -20,7 +20,8 @@
         "nyholm/psr7": "^1.2",
         "php-http/guzzle6-adapter": "^2.0",
         "phpunit/phpunit": "~8.5",
-        "symfony/yaml": "^5.0"
+        "symfony/yaml": "^5.0",
+        "overtrue/phplint": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -33,7 +34,16 @@
         }
     },
     "scripts": {
+        "cs-check": "vendor/bin/php-cs-fixer fix --ansi --dry-run",
         "cs-fix": "vendor/bin/php-cs-fixer fix --ansi",
-        "test": "vendor/bin/phpunit"
+        "lint": [
+            "@composer validate --ansi",
+            "vendor/bin/phplint . --exclude=vendor"
+        ],
+        "test": [
+            "@lint",
+            "@cs-check",
+            "vendor/bin/phpunit"
+        ]
     }
 }
