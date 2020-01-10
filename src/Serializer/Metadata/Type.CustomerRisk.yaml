@@ -1,0 +1,5 @@
+Etrias\AfterPayConnector\Type\CustomerRisk:
+  properties:
+    ipAddress:
+      type: string
+      serialized_name: ipAddress

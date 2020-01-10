@@ -12,6 +12,9 @@ Etrias\AfterPayConnector\Type\CheckoutCustomer:
     identificationNumber:
       type: string
       serialized_name: identificationNumber
+    riskData:
+      type: Etrias\AfterPayConnector\Type\CustomerRisk
+      serialized_name: riskData
     salutation:
       type: string
       serialized_name: salutation

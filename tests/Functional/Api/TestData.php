@@ -6,6 +6,7 @@ namespace Tests\Etrias\AfterPayConnector\Functional\Api;
 
 use Etrias\AfterPayConnector\Type\Address;
 use Etrias\AfterPayConnector\Type\CheckoutCustomer;
+use Etrias\AfterPayConnector\Type\CustomerRisk;
 use Etrias\AfterPayConnector\Type\Order;
 use Etrias\AfterPayConnector\Type\OrderItem;
 use Etrias\AfterPayConnector\Type\OrderSummary;
@@ -20,8 +21,17 @@ abstract class TestData
             ->withBirthDate(28, 7, 1987)
         ;
         $customer->address = self::address();
+        $customer->riskData = self::customerRisk();
 
         return $customer;
+    }
+
+    public static function customerRisk(): CustomerRisk
+    {
+        $risk = new CustomerRisk();
+        $risk->ipAddress = '127.0.0.1';
+
+        return $risk;
     }
 
     public static function address(): Address
