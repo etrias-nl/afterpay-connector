@@ -53,6 +53,13 @@ class RefundOrderRequest
         return $this;
     }
 
+    public function addItem(RefundOrderItem $item): self
+    {
+        $this->items[] = $item;
+
+        return $this;
+    }
+
     public function getCreditNoteNumber(): ?string
     {
         return $this->creditNoteNumber;

@@ -87,4 +87,11 @@ trait OrderSummaryTrait
 
         return $this;
     }
+
+    public function addItem(OrderItem $item): self
+    {
+        $this->items[] = $item;
+
+        return $this;
+    }
 }
