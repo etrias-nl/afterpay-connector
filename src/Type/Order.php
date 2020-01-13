@@ -9,5 +9,17 @@ class Order
     use OrderSummaryTrait;
 
     /** @var null|string */
-    public $number;
+    protected $number;
+
+    public function getNumber(): ?string
+    {
+        return $this->number;
+    }
+
+    public function setNumber(?string $number): self
+    {
+        $this->number = $number;
+
+        return $this;
+    }
 }

@@ -11,20 +11,47 @@ class AuthorizePaymentRequest
     use AuthorizeRequestTrait;
 
     /** @var null|Payment */
-    public $payment;
+    protected $payment;
 
     /** @var null|string */
-    public $checkoutId;
+    protected $checkoutId;
 
     /** @var null|string */
-    public $merchantId;
+    protected $merchantId;
 
-    public static function forInvoice(): self
+    public function getPayment(): ?Payment
     {
-        $request = new self();
-        $request->payment = new Payment();
-        $request->payment->type = Payment::TYPE_INVOICE;
+        return $this->payment;
+    }
 
-        return $request;
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
+
+        return $this;
+    }
+
+    public function getCheckoutId(): ?string
+    {
+        return $this->checkoutId;
+    }
+
+    public function setCheckoutId(?string $checkoutId): self
+    {
+        $this->checkoutId = $checkoutId;
+
+        return $this;
+    }
+
+    public function getMerchantId(): ?string
+    {
+        return $this->merchantId;
+    }
+
+    public function setMerchantId(?string $merchantId): self
+    {
+        $this->merchantId = $merchantId;
+
+        return $this;
     }
 }

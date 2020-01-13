@@ -9,5 +9,17 @@ class RefundOrderItem
     use OrderItemTrait;
 
     /** @var null|string */
-    public $refundType;
+    protected $refundType;
+
+    public function getRefundType(): ?string
+    {
+        return $this->refundType;
+    }
+
+    public function setRefundType(?string $refundType): self
+    {
+        $this->refundType = $refundType;
+
+        return $this;
+    }
 }

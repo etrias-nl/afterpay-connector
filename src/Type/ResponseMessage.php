@@ -18,22 +18,22 @@ class ResponseMessage
     public const ACTION_CODE_IDENTIFY = 'AskConsumerToIdentify';
 
     /** @var null|string */
-    public $type;
+    protected $type;
 
     /** @var null|string */
-    public $code;
+    protected $code;
 
     /** @var null|string */
-    public $actionCode;
+    protected $actionCode;
 
     /** @var null|string */
-    public $message;
+    protected $message;
 
     /** @var null|string */
-    public $customerFacingMessage;
+    protected $customerFacingMessage;
 
     /** @var null|string */
-    public $fieldReference;
+    protected $fieldReference;
 
     public function toExceptionMessage(): string
     {
@@ -45,5 +45,77 @@ class ResponseMessage
         }
 
         return null === $this->fieldReference || '' === $this->fieldReference ? $message : 'Error for field "'.$this->fieldReference.'": '.$message;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getActionCode(): ?string
+    {
+        return $this->actionCode;
+    }
+
+    public function setActionCode(?string $actionCode): self
+    {
+        $this->actionCode = $actionCode;
+
+        return $this;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getCustomerFacingMessage(): ?string
+    {
+        return $this->customerFacingMessage;
+    }
+
+    public function setCustomerFacingMessage(?string $customerFacingMessage): self
+    {
+        $this->customerFacingMessage = $customerFacingMessage;
+
+        return $this;
+    }
+
+    public function getFieldReference(): ?string
+    {
+        return $this->fieldReference;
+    }
+
+    public function setFieldReference(?string $fieldReference): self
+    {
+        $this->fieldReference = $fieldReference;
+
+        return $this;
     }
 }

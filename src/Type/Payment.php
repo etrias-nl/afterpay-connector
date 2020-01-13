@@ -9,5 +9,17 @@ class Payment
     public const TYPE_INVOICE = 'Invoice';
 
     /** @var null|string */
-    public $type;
+    protected $type;
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
 }

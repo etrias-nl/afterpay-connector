@@ -5,46 +5,86 @@ declare(strict_types=1);
 namespace Etrias\AfterPayConnector\Request;
 
 use Etrias\AfterPayConnector\Type\RefundOrderItem;
-use Etrias\AfterPayConnector\Type\RefundType;
 
 class RefundOrderRequest
 {
     /** @var null|string */
-    public $captureNumber;
+    protected $captureNumber;
 
     /** @var RefundOrderItem[] */
-    public $items = [];
+    protected $items = [];
 
     /** @var null|string */
-    public $creditNoteNumber;
+    protected $creditNoteNumber;
 
     /** @var null|string */
-    public $merchantId;
+    protected $merchantId;
 
     /** @var null|string */
-    public $refundType;
+    protected $refundType;
 
-    public static function forRefund(string $captureNumber): self
+    public function getCaptureNumber(): ?string
     {
-        $request = new self();
-        $request->captureNumber = $captureNumber;
-        $request->refundType = RefundType::REFUND;
-
-        return $request;
+        return $this->captureNumber;
     }
 
-    public static function forReturn(string $captureNumber): self
+    public function setCaptureNumber(?string $captureNumber): self
     {
-        $request = new self();
-        $request->captureNumber = $captureNumber;
-        $request->refundType = RefundType::RETURN;
+        $this->captureNumber = $captureNumber;
 
-        return $request;
+        return $this;
     }
 
-    public function withItems(RefundOrderItem ...$items)
+    /**
+     * @return RefundOrderItem[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param RefundOrderItem[] $items
+     */
+    public function setItems(array $items): self
     {
         $this->items = $items;
+
+        return $this;
+    }
+
+    public function getCreditNoteNumber(): ?string
+    {
+        return $this->creditNoteNumber;
+    }
+
+    public function setCreditNoteNumber(?string $creditNoteNumber): self
+    {
+        $this->creditNoteNumber = $creditNoteNumber;
+
+        return $this;
+    }
+
+    public function getMerchantId(): ?string
+    {
+        return $this->merchantId;
+    }
+
+    public function setMerchantId(?string $merchantId): self
+    {
+        $this->merchantId = $merchantId;
+
+        return $this;
+    }
+
+    public function getRefundType(): ?string
+    {
+        return $this->refundType;
+    }
+
+    public function setRefundType(?string $refundType): self
+    {
+        $this->refundType = $refundType;
 
         return $this;
     }

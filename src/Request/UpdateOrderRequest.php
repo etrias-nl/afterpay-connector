@@ -12,5 +12,17 @@ class UpdateOrderRequest
     use ReferencesTrait;
 
     /** @var null|OrderSummary */
-    public $updateOrderSummary;
+    protected $updateOrderSummary;
+
+    public function getUpdateOrderSummary(): ?OrderSummary
+    {
+        return $this->updateOrderSummary;
+    }
+
+    public function setUpdateOrderSummary(?OrderSummary $updateOrderSummary): self
+    {
+        $this->updateOrderSummary = $updateOrderSummary;
+
+        return $this;
+    }
 }

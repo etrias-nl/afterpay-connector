@@ -9,8 +9,32 @@ class AuthorizePaymentResponse
     use AuthorizeResponseTrait;
 
     /** @var null|string */
-    public $reservationId;
+    protected $reservationId;
 
     /** @var null|\DateTime */
-    public $expirationDate;
+    protected $expirationDate;
+
+    public function getReservationId(): ?string
+    {
+        return $this->reservationId;
+    }
+
+    public function setReservationId(?string $reservationId): self
+    {
+        $this->reservationId = $reservationId;
+
+        return $this;
+    }
+
+    public function getExpirationDate(): ?\DateTime
+    {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate(?\DateTime $expirationDate): self
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
 }

@@ -7,32 +7,84 @@ namespace Etrias\AfterPayConnector\Type;
 trait OrderSummaryTrait
 {
     /** @var null|float|int|string */
-    public $totalGrossAmount;
+    protected $totalGrossAmount;
 
     /** @var null|float|int|string */
-    public $totalNetAmount;
+    protected $totalNetAmount;
 
     /** @var null|string */
-    public $currency;
+    protected $currency;
 
     /** @var OrderItem[] */
-    public $items = [];
+    protected $items = [];
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getTotalGrossAmount()
+    {
+        return $this->totalGrossAmount;
+    }
+
+    /**
+     * @param null|float|int|string $totalGrossAmount
+     *
+     * @return self
+     */
+    public function setTotalGrossAmount($totalGrossAmount)
+    {
+        $this->totalGrossAmount = $totalGrossAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getTotalNetAmount()
+    {
+        return $this->totalNetAmount;
+    }
+
+    /**
+     * @param null|float|int|string $totalNetAmount
+     *
+     * @return self
+     */
+    public function setTotalNetAmount($totalNetAmount)
+    {
+        $this->totalNetAmount = $totalNetAmount;
+
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): self
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @return OrderItem[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
+    }
 
     /**
      * @param OrderItem[] $items
      */
-    public static function forItems(iterable $items): self
+    public function setItems(array $items): self
     {
-        $object = new self();
-        $object->totalGrossAmount = .0;
-        $object->totalNetAmount = .0;
+        $this->items = $items;
 
-        foreach ($items as $item) {
-            $object->items[] = $item;
-            $object->totalGrossAmount += $item->grossUnitPrice * $item->quantity;
-            $object->totalNetAmount += $item->netUnitPrice * $item->quantity;
-        }
-
-        return $object;
+        return $this;
     }
 }

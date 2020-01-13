@@ -11,6 +11,8 @@ use Etrias\AfterPayConnector\Request\AuthorizePaymentRequest;
 use Etrias\AfterPayConnector\Request\CaptureRequest;
 use Etrias\AfterPayConnector\Request\RefundOrderRequest;
 use Etrias\AfterPayConnector\Request\VoidAuthorizationRequest;
+use Etrias\AfterPayConnector\Type\Payment;
+use Etrias\AfterPayConnector\Type\RefundType;
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Http\Client\Common\Plugin\ErrorPlugin;
@@ -51,17 +53,23 @@ abstract class ApiTestCase extends TestCase
 
     protected function checkout(string $orderNumber): string
     {
-        $request = AuthorizePaymentRequest::forInvoice();
-        $request->customer = TestData::checkoutCustomer();
-        $request->order = TestData::order($orderNumber);
+        $payment = new Payment();
+        $payment->setType(Payment::TYPE_INVOICE);
 
-        return $this->orders->authorizePayment($request)->checkoutId;
+        $request = new AuthorizePaymentRequest();
+        $request
+            ->setPayment($payment)
+            ->setCustomer(TestData::checkoutCustomer())
+            ->setOrder(TestData::order($orderNumber))
+        ;
+
+        return $this->orders->authorizePayment($request)->getCheckoutId();
     }
 
     protected function cancel(string $orderNumber): void
     {
         $request = new VoidAuthorizationRequest();
-        $request->cancellationDetails = TestData::orderSummary();
+        $request->setCancellationDetails(TestData::orderSummary());
 
         $this->orders->voidAuthorization($orderNumber, $request);
     }
@@ -69,9 +77,9 @@ abstract class ApiTestCase extends TestCase
     protected function capture(string $orderNumber): string
     {
         $request = new CaptureRequest();
-        $request->orderDetails = TestData::orderSummary();
+        $request->setOrderDetails(TestData::orderSummary());
 
-        return $this->orders->capturePayment($orderNumber, $request)->captureNumber;
+        return $this->orders->capturePayment($orderNumber, $request)->getCaptureNumber();
     }
 
     /**
@@ -79,10 +87,13 @@ abstract class ApiTestCase extends TestCase
      */
     protected function refund(string $orderNumber, string $captureNumber): array
     {
-        $request = RefundOrderRequest::forRefund($captureNumber)
-            ->withItems(TestData::refundOrderItem())
+        $request = new RefundOrderRequest();
+        $request
+            ->setRefundType(RefundType::REFUND)
+            ->setCaptureNumber($captureNumber)
+            ->setItems([TestData::refundOrderItem()])
         ;
 
-        return $this->orders->refundPayment($orderNumber, $request)->refundNumbers;
+        return $this->orders->refundPayment($orderNumber, $request)->getRefundNumbers();
     }
 }

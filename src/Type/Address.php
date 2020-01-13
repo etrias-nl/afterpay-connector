@@ -7,37 +7,90 @@ namespace Etrias\AfterPayConnector\Type;
 class Address
 {
     /** @var null|string */
-    public $countryCode;
+    protected $countryCode;
 
     /** @var null|string */
-    public $postalCode;
+    protected $postalCode;
 
     /** @var null|string */
-    public $postalPlace;
+    protected $postalPlace;
 
     /** @var null|string */
-    public $street;
+    protected $street;
 
     /** @var null|string */
-    public $streetNumber;
+    protected $streetNumber;
 
     /** @var null|string */
-    public $streetNumberAdditional;
+    protected $streetNumberAdditional;
 
-    public static function forPlace(?string $countryCode, ?string $postalCode, ?string $postalPlace): self
+    public function getCountryCode(): ?string
     {
-        $object = new self();
-        $object->countryCode = $countryCode;
-        $object->postalCode = $postalCode;
-        $object->postalPlace = $postalPlace;
-
-        return $object;
+        return $this->countryCode;
     }
 
-    public function withStreet(?string $street, ?string $streetNumber, ?string $streetNumberAdditional): self
+    public function setCountryCode(?string $countryCode): self
+    {
+        $this->countryCode = $countryCode;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getPostalPlace(): ?string
+    {
+        return $this->postalPlace;
+    }
+
+    public function setPostalPlace(?string $postalPlace): self
+    {
+        $this->postalPlace = $postalPlace;
+
+        return $this;
+    }
+
+    public function getStreet(): ?string
+    {
+        return $this->street;
+    }
+
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
+
+        return $this;
+    }
+
+    public function getStreetNumber(): ?string
+    {
+        return $this->streetNumber;
+    }
+
+    public function setStreetNumber(?string $streetNumber): self
+    {
         $this->streetNumber = $streetNumber;
+
+        return $this;
+    }
+
+    public function getStreetNumberAdditional(): ?string
+    {
+        return $this->streetNumberAdditional;
+    }
+
+    public function setStreetNumberAdditional(?string $streetNumberAdditional): self
+    {
         $this->streetNumberAdditional = $streetNumberAdditional;
 
         return $this;

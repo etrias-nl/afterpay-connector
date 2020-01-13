@@ -7,5 +7,17 @@ namespace Etrias\AfterPayConnector\Type;
 class CustomerRisk
 {
     /** @var null|string */
-    public $ipAddress;
+    protected $ipAddress;
+
+    public function getIpAddress(): ?string
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress(?string $ipAddress): self
+    {
+        $this->ipAddress = $ipAddress;
+
+        return $this;
+    }
 }

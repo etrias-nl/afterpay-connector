@@ -9,5 +9,23 @@ use Etrias\AfterPayConnector\Type\Refund;
 class GetAllRefundsResponse
 {
     /** @var Refund[] */
-    public $refunds = [];
+    protected $refunds = [];
+
+    /**
+     * @return Refund[]
+     */
+    public function getRefunds(): array
+    {
+        return $this->refunds;
+    }
+
+    /**
+     * @param Refund[] $refunds
+     */
+    public function setRefunds(array $refunds): self
+    {
+        $this->refunds = $refunds;
+
+        return $this;
+    }
 }

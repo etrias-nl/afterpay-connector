@@ -7,11 +7,53 @@ namespace Etrias\AfterPayConnector\Type;
 class Cancellation
 {
     /** @var null|string */
-    public $cancellationAmount;
+    protected $cancellationAmount;
 
     /** @var CancellationItem[] */
-    public $cancellationItems = [];
+    protected $cancellationItems = [];
 
     /** @var null|string */
-    public $cancellationNo;
+    protected $cancellationNo;
+
+    public function getCancellationAmount(): ?string
+    {
+        return $this->cancellationAmount;
+    }
+
+    public function setCancellationAmount(?string $cancellationAmount): self
+    {
+        $this->cancellationAmount = $cancellationAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return CancellationItem[]
+     */
+    public function getCancellationItems(): array
+    {
+        return $this->cancellationItems;
+    }
+
+    /**
+     * @param CancellationItem[] $cancellationItems
+     */
+    public function setCancellationItems(array $cancellationItems): self
+    {
+        $this->cancellationItems = $cancellationItems;
+
+        return $this;
+    }
+
+    public function getCancellationNo(): ?string
+    {
+        return $this->cancellationNo;
+    }
+
+    public function setCancellationNo(?string $cancellationNo): self
+    {
+        $this->cancellationNo = $cancellationNo;
+
+        return $this;
+    }
 }

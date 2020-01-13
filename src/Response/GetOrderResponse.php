@@ -13,17 +13,95 @@ use Etrias\AfterPayConnector\Type\ResponseOrderDetails;
 class GetOrderResponse
 {
     /** @var Cancellation[] */
-    public $cancellations = [];
+    protected $cancellations = [];
 
     /** @var Capture[] */
-    public $captures = [];
+    protected $captures = [];
 
     /** @var null|ResponseOrderDetails */
-    public $orderDetails;
+    protected $orderDetails;
 
     /** @var null|Payment */
-    public $payment;
+    protected $payment;
 
     /** @var Refund[] */
-    public $refunds = [];
+    protected $refunds = [];
+
+    /**
+     * @return Cancellation[]
+     */
+    public function getCancellations(): array
+    {
+        return $this->cancellations;
+    }
+
+    /**
+     * @param Cancellation[] $cancellations
+     */
+    public function setCancellations(array $cancellations): self
+    {
+        $this->cancellations = $cancellations;
+
+        return $this;
+    }
+
+    /**
+     * @return Capture[]
+     */
+    public function getCaptures(): array
+    {
+        return $this->captures;
+    }
+
+    /**
+     * @param Capture[] $captures
+     */
+    public function setCaptures(array $captures): self
+    {
+        $this->captures = $captures;
+
+        return $this;
+    }
+
+    public function getOrderDetails(): ?ResponseOrderDetails
+    {
+        return $this->orderDetails;
+    }
+
+    public function setOrderDetails(?ResponseOrderDetails $orderDetails): self
+    {
+        $this->orderDetails = $orderDetails;
+
+        return $this;
+    }
+
+    public function getPayment(): ?Payment
+    {
+        return $this->payment;
+    }
+
+    public function setPayment(?Payment $payment): self
+    {
+        $this->payment = $payment;
+
+        return $this;
+    }
+
+    /**
+     * @return Refund[]
+     */
+    public function getRefunds(): array
+    {
+        return $this->refunds;
+    }
+
+    /**
+     * @param Refund[] $refunds
+     */
+    public function setRefunds(array $refunds): self
+    {
+        $this->refunds = $refunds;
+
+        return $this;
+    }
 }
