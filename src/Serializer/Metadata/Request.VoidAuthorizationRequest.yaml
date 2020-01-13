@@ -6,3 +6,6 @@ Etrias\AfterPayConnector\Request\VoidAuthorizationRequest:
     merchantId:
       type: string
       serialized_name: merchantId
+    parentTransactionReference:
+      type: string
+      serialized_name: parentTransactionReference

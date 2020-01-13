@@ -14,6 +14,9 @@ class VoidAuthorizationRequest
     /** @var null|string */
     protected $merchantId;
 
+    /** @var null|string */
+    protected $parentTransactionReference;
+
     public function getCancellationDetails(): ?OrderSummary
     {
         return $this->cancellationDetails;
@@ -34,6 +37,18 @@ class VoidAuthorizationRequest
     public function setMerchantId(?string $merchantId): self
     {
         $this->merchantId = $merchantId;
+
+        return $this;
+    }
+
+    public function getParentTransactionReference(): ?string
+    {
+        return $this->parentTransactionReference;
+    }
+
+    public function setParentTransactionReference(?string $parentTransactionReference): self
+    {
+        $this->parentTransactionReference = $parentTransactionReference;
 
         return $this;
     }
