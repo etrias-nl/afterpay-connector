@@ -9,5 +9,17 @@ class CancellationItem
     use OrderItemTrait;
 
     /** @var null|string */
-    public $cancellationNumber;
+    protected $cancellationNumber;
+
+    public function getCancellationNumber(): ?string
+    {
+        return $this->cancellationNumber;
+    }
+
+    public function setCancellationNumber(?string $cancellationNumber): self
+    {
+        $this->cancellationNumber = $cancellationNumber;
+
+        return $this;
+    }
 }

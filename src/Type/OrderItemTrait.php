@@ -7,34 +7,148 @@ namespace Etrias\AfterPayConnector\Type;
 trait OrderItemTrait
 {
     /** @var null|string */
-    public $description;
+    protected $description;
 
     /** @var null|float|int|string */
-    public $grossUnitPrice;
+    protected $grossUnitPrice;
 
     /** @var null|float|int|string */
-    public $netUnitPrice;
+    protected $netUnitPrice;
 
     /** @var null|string */
-    public $productId;
+    protected $productId;
 
     /** @var null|int|string */
-    public $quantity;
+    protected $quantity;
 
     /** @var null|float|int|string */
-    public $vatAmount;
+    protected $vatAmount;
 
     /** @var null|float|int|string */
-    public $vatPercent;
+    protected $vatPercent;
 
-    public static function forProduct(string $productId, string $description, int $quantity = 1): self
+    public function getDescription(): ?string
     {
-        $object = new self();
-        $object->productId = $productId;
-        $object->description = $description;
-        $object->quantity = $quantity;
+        return $this->description;
+    }
 
-        return $object;
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getGrossUnitPrice()
+    {
+        return $this->grossUnitPrice;
+    }
+
+    /**
+     * @param null|float|int|string $grossUnitPrice
+     *
+     * @return self
+     */
+    public function setGrossUnitPrice($grossUnitPrice)
+    {
+        $this->grossUnitPrice = $grossUnitPrice;
+
+        return $this;
+    }
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getNetUnitPrice()
+    {
+        return $this->netUnitPrice;
+    }
+
+    /**
+     * @param null|float|int|string $netUnitPrice
+     *
+     * @return self
+     */
+    public function setNetUnitPrice($netUnitPrice)
+    {
+        $this->netUnitPrice = $netUnitPrice;
+
+        return $this;
+    }
+
+    public function getProductId(): ?string
+    {
+        return $this->productId;
+    }
+
+    public function setProductId(?string $productId): self
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
+    /**
+     * @return null|int|string
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param null|int|string $quantity
+     *
+     * @return self
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getVatAmount()
+    {
+        return $this->vatAmount;
+    }
+
+    /**
+     * @param null|float|int|string $vatAmount
+     *
+     * @return self
+     */
+    public function setVatAmount($vatAmount)
+    {
+        $this->vatAmount = $vatAmount;
+
+        return $this;
+    }
+
+    /**
+     * @return null|float|int|string
+     */
+    public function getVatPercent()
+    {
+        return $this->vatPercent;
+    }
+
+    /**
+     * @param null|float|int|string $vatPercent
+     *
+     * @return self
+     */
+    public function setVatPercent($vatPercent)
+    {
+        $this->vatPercent = $vatPercent;
+
+        return $this;
     }
 
     /**

@@ -7,11 +7,47 @@ namespace Etrias\AfterPayConnector\Type;
 class PaymentMethod
 {
     /** @var null|string */
-    public $logo;
+    protected $logo;
 
     /** @var null|string */
-    public $tag;
+    protected $tag;
 
     /** @var null|string */
-    public $title;
+    protected $title;
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): self
+    {
+        $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag;
+    }
+
+    public function setTag(?string $tag): self
+    {
+        $this->tag = $tag;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
 }

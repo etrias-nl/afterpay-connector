@@ -7,14 +7,62 @@ namespace Etrias\AfterPayConnector\Response;
 class UpdateOrderResponse
 {
     /** @var null|string */
-    public $checkoutId;
+    protected $checkoutId;
 
     /** @var null|\DateTime */
-    public $expirationDate;
+    protected $expirationDate;
 
     /** @var null|string */
-    public $outcome;
+    protected $outcome;
 
     /** @var null|string */
-    public $reservationId;
+    protected $reservationId;
+
+    public function getCheckoutId(): ?string
+    {
+        return $this->checkoutId;
+    }
+
+    public function setCheckoutId(?string $checkoutId): self
+    {
+        $this->checkoutId = $checkoutId;
+
+        return $this;
+    }
+
+    public function getExpirationDate(): ?\DateTime
+    {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate(?\DateTime $expirationDate): self
+    {
+        $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    public function getOutcome(): ?string
+    {
+        return $this->outcome;
+    }
+
+    public function setOutcome(?string $outcome): self
+    {
+        $this->outcome = $outcome;
+
+        return $this;
+    }
+
+    public function getReservationId(): ?string
+    {
+        return $this->reservationId;
+    }
+
+    public function setReservationId(?string $reservationId): self
+    {
+        $this->reservationId = $reservationId;
+
+        return $this;
+    }
 }

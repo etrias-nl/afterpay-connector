@@ -14,71 +14,181 @@ class CheckoutCustomer
     public const SALUTATION_MISS = 'Miss';
 
     /** @var null|string */
-    public $customerCategory;
+    protected $customerCategory;
 
     /** @var null|\DateTime */
-    public $birthDate;
+    protected $birthDate;
 
     /** @var null|string */
-    public $email;
+    protected $email;
 
     /** @var null|string */
-    public $identificationNumber;
+    protected $identificationNumber;
 
     /** @var null|CustomerRisk */
-    public $riskData;
+    protected $riskData;
 
     /** @var null|string */
-    public $salutation;
+    protected $salutation;
 
     /** @var null|Address */
-    public $address;
+    protected $address;
 
     /** @var null|string */
-    public $companyName;
+    protected $companyName;
 
     /** @var null|string */
-    public $customerNumber;
+    protected $customerNumber;
 
     /** @var null|string */
-    public $firstName;
+    protected $firstName;
 
     /** @var null|string */
-    public $lastName;
+    protected $lastName;
 
     /** @var null|string */
-    public $phone;
+    protected $phone;
 
-    public static function forPerson(?string $email = null): self
+    public function getCustomerCategory(): ?string
     {
-        $object = new self();
-        $object->customerCategory = self::CATEGORY_PERSON;
-        $object->email = $email;
-
-        return $object;
+        return $this->customerCategory;
     }
 
-    public static function forCompany(?string $companyName = null): self
+    public function setCustomerCategory(?string $customerCategory): self
     {
-        $object = new self();
-        $object->customerCategory = self::CATEGORY_COMPANY;
-        $object->companyName = $companyName;
+        $this->customerCategory = $customerCategory;
 
-        return $object;
+        return $this;
     }
 
-    public function withFullName(?string $salutation, ?string $firstName, ?string $lastName): self
+    public function getBirthDate(): ?\DateTime
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(?\DateTime $birthDate): self
+    {
+        $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getIdentificationNumber(): ?string
+    {
+        return $this->identificationNumber;
+    }
+
+    public function setIdentificationNumber(?string $identificationNumber): self
+    {
+        $this->identificationNumber = $identificationNumber;
+
+        return $this;
+    }
+
+    public function getRiskData(): ?CustomerRisk
+    {
+        return $this->riskData;
+    }
+
+    public function setRiskData(?CustomerRisk $riskData): self
+    {
+        $this->riskData = $riskData;
+
+        return $this;
+    }
+
+    public function getSalutation(): ?string
+    {
+        return $this->salutation;
+    }
+
+    public function setSalutation(?string $salutation): self
     {
         $this->salutation = $salutation;
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getCompanyName(): ?string
+    {
+        return $this->companyName;
+    }
+
+    public function setCompanyName(?string $companyName): self
+    {
+        $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    public function getCustomerNumber(): ?string
+    {
+        return $this->customerNumber;
+    }
+
+    public function setCustomerNumber(?string $customerNumber): self
+    {
+        $this->customerNumber = $customerNumber;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
         $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function withBirthDate(int $day, int $month, int $year): self
+    public function getPhone(): ?string
     {
-        $this->birthDate = (new \DateTime())->setTimestamp(mktime(0, 0, 0, $month, $day, $year));
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }

@@ -20,6 +20,7 @@ use Etrias\AfterPayConnector\Type\Outcome;
 use Etrias\AfterPayConnector\Type\Payment;
 use Etrias\AfterPayConnector\Type\Refund;
 use Etrias\AfterPayConnector\Type\RefundItem;
+use Etrias\AfterPayConnector\Type\RefundType;
 
 /**
  * @internal
@@ -28,36 +29,44 @@ final class OrdersTest extends ApiTestCase
 {
     public function testAuthorizePayment(): void
     {
-        $request = AuthorizePaymentRequest::forInvoice();
-        $request->customer = TestData::checkoutCustomer();
-        $request->order = TestData::order();
+        $payment = new Payment();
+        $payment->setType(Payment::TYPE_INVOICE);
+
+        $request = new AuthorizePaymentRequest();
+        $request
+            ->setPayment($payment)
+            ->setCustomer(TestData::checkoutCustomer())
+            ->setOrder(TestData::order())
+        ;
 
         $response = $this->orders->authorizePayment($request);
 
-        self::assertSame(Outcome::ACCEPTED, $response->outcome);
-        self::assertSame('John', $response->customer->firstName);
-        self::assertSame('Doe 😁', $response->customer->lastName);
-        self::assertSame('NL', $response->customer->addressList[0]->countryCode);
-        self::assertNull($response->deliveryCustomer);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
+        self::assertSame(Outcome::ACCEPTED, $response->getOutcome());
+        self::assertSame('John', $response->getCustomer()->getFirstName());
+        self::assertSame('Doe 😁', $response->getCustomer()->getLastName());
+        self::assertSame('NL', $response->getCustomer()->getAddressList()[0]->getCountryCode());
+        self::assertNull($response->getDeliveryCustomer());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getReservationId());
     }
 
     public function testAvailablePaymentMethods(): void
     {
         $request = new AvailablePaymentMethodsRequest();
-        $request->customer = TestData::checkoutCustomer();
-        $request->order = TestData::order();
+        $request
+            ->setCustomer(TestData::checkoutCustomer())
+            ->setOrder(TestData::order())
+        ;
 
         $response = $this->orders->getAvailablePaymentMethods($request);
 
-        self::assertSame(Outcome::ACCEPTED, $response->outcome);
-        self::assertSame('John', $response->customer->firstName);
-        self::assertSame('Doe 😁', $response->customer->lastName);
-        self::assertSame('NL', $response->customer->addressList[0]->countryCode);
-        self::assertNull($response->deliveryCustomer);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
-        self::assertIsString($response->paymentMethods[0]->title);
+        self::assertSame(Outcome::ACCEPTED, $response->getOutcome());
+        self::assertSame('John', $response->getCustomer()->getFirstName());
+        self::assertSame('Doe 😁', $response->getCustomer()->getLastName());
+        self::assertSame('NL', $response->getCustomer()->getAddressList()[0]->getCountryCode());
+        self::assertNull($response->getDeliveryCustomer());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
+        self::assertIsString($response->getPaymentMethods()[0]->getTitle());
     }
 
     public function testCapturePayment(): void
@@ -65,20 +74,20 @@ final class OrdersTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
 
         $request = new CaptureRequest();
-        $request->orderDetails = TestData::orderSummary();
+        $request->setOrderDetails(TestData::orderSummary());
 
         $response = $this->orders->capturePayment($orderNumber, $request);
 
-        self::assertSame('38', $response->authorizedAmount);
-        self::assertSame('38', $response->capturedAmount);
-        self::assertIsString($response->captureNumber);
-        self::assertSame('0', $response->remainingAuthorizedAmount);
+        self::assertSame('38', $response->getAuthorizedAmount());
+        self::assertSame('38', $response->getCapturedAmount());
+        self::assertIsString($response->getCaptureNumber());
+        self::assertSame('0', $response->getRemainingAuthorizedAmount());
     }
 
     public function testCapturePaymentWithUnknownOrder(): void
     {
         $request = new CaptureRequest();
-        $request->orderDetails = TestData::orderSummary();
+        $request->setOrderDetails(TestData::orderSummary());
 
         $this->expectException(AfterPayException::class);
 
@@ -90,13 +99,13 @@ final class OrdersTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
 
         $request = new VoidAuthorizationRequest();
-        $request->cancellationDetails = TestData::orderSummary();
+        $request->setCancellationDetails(TestData::orderSummary());
 
         $response = $this->orders->voidAuthorization($orderNumber, $request);
 
-        self::assertSame('0', $response->remainingAuthorizedAmount);
-        self::assertSame('38', $response->totalAuthorizedAmount);
-        self::assertSame('0', $response->totalCapturedAmount);
+        self::assertSame('0', $response->getRemainingAuthorizedAmount());
+        self::assertSame('38', $response->getTotalAuthorizedAmount());
+        self::assertSame('0', $response->getTotalCapturedAmount());
     }
 
     public function testRefundPayment(): void
@@ -104,16 +113,19 @@ final class OrdersTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
         $captureNumber = $this->capture($orderNumber);
 
-        $request = RefundOrderRequest::forRefund($captureNumber)
-            ->withItems(TestData::refundOrderItem())
+        $request = new RefundOrderRequest();
+        $request
+            ->setCaptureNumber($captureNumber)
+            ->setRefundType(RefundType::REFUND)
+            ->setItems([TestData::refundOrderItem()])
         ;
 
         $response = $this->orders->refundPayment($orderNumber, $request);
 
-        self::assertIsString($response->refundNumbers[0]);
-        self::assertSame('38', $response->totalAuthorizedAmount);
-        self::assertSame('38', $response->totalCapturedAmount);
-        self::assertSame('12.5', $response->totalRefundedAmount);
+        self::assertIsString($response->getRefundNumbers()[0]);
+        self::assertSame('38', $response->getTotalAuthorizedAmount());
+        self::assertSame('38', $response->getTotalCapturedAmount());
+        self::assertSame('12.5', $response->getTotalRefundedAmount());
     }
 
     public function testGetOrder(): void
@@ -121,22 +133,23 @@ final class OrdersTest extends ApiTestCase
         $this->checkout($orderNumber = TestData::orderNumber());
 
         $response = $this->orders->getOrder($orderNumber);
+        $details = $response->getOrderDetails();
 
-        self::assertSame([], $response->cancellations);
-        self::assertSame([], $response->captures);
-        self::assertSame('EUR', $response->orderDetails->currency);
-        self::assertInstanceOf(\DateTime::class, $response->orderDetails->expirationDate);
-        self::assertInstanceOf(\DateTime::class, $response->orderDetails->insertedAt);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->orderDetails->orderId);
-        self::assertInstanceOf(OrderItemExtended::class, $response->orderDetails->orderItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->orderDetails->orderItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->orderDetails->orderItems[0]->quantity);
-        self::assertSame($orderNumber, $response->orderDetails->orderNumber);
-        self::assertSame('38', $response->orderDetails->totalGrossAmount);
-        self::assertSame('26.5', $response->orderDetails->totalNetAmount);
-        self::assertInstanceOf(\DateTime::class, $response->orderDetails->updatedAt);
-        self::assertInstanceOf(Payment::class, $response->payment);
-        self::assertSame([], $response->refunds);
+        self::assertSame([], $response->getCancellations());
+        self::assertSame([], $response->getCaptures());
+        self::assertSame('EUR', $details->getCurrency());
+        self::assertInstanceOf(\DateTime::class, $details->getExpirationDate());
+        self::assertInstanceOf(\DateTime::class, $details->getInsertedAt());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $details->getOrderId());
+        self::assertInstanceOf(OrderItemExtended::class, $details->getOrderItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $details->getOrderItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $details->getOrderItems()[0]->getQuantity());
+        self::assertSame($orderNumber, $details->getOrderNumber());
+        self::assertSame('38', $details->getTotalGrossAmount());
+        self::assertSame('26.5', $details->getTotalNetAmount());
+        self::assertInstanceOf(\DateTime::class, $details->getUpdatedAt());
+        self::assertInstanceOf(Payment::class, $response->getPayment());
+        self::assertSame([], $response->getRefunds());
     }
 
     public function testGetOrderCanceled(): void
@@ -145,16 +158,17 @@ final class OrdersTest extends ApiTestCase
         $this->cancel($orderNumber);
 
         $response = $this->orders->getOrder($orderNumber);
+        $cancellations = $response->getCancellations();
 
-        self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
-        self::assertSame('38', $response->cancellations[0]->cancellationAmount);
-        self::assertInstanceOf(CancellationItem::class, $response->cancellations[0]->cancellationItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->cancellations[0]->cancellationItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->cancellations[0]->cancellationItems[0]->quantity);
-        self::assertSame($response->cancellations[0]->cancellationNo, $response->cancellations[0]->cancellationItems[0]->cancellationNumber);
-        self::assertIsString($response->cancellations[0]->cancellationNo);
-        self::assertSame([], $response->captures);
-        self::assertSame([], $response->refunds);
+        self::assertInstanceOf(Cancellation::class, $cancellations[0]);
+        self::assertSame('38', $cancellations[0]->getCancellationAmount());
+        self::assertInstanceOf(CancellationItem::class, $cancellations[0]->getCancellationItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $cancellations[0]->getCancellationItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $cancellations[0]->getCancellationItems()[0]->getQuantity());
+        self::assertSame($cancellations[0]->getCancellationNo(), $cancellations[0]->getCancellationItems()[0]->getCancellationNumber());
+        self::assertIsString($cancellations[0]->getCancellationNo());
+        self::assertSame([], $response->getCaptures());
+        self::assertSame([], $response->getRefunds());
     }
 
     public function testGetOrderCaptured(): void
@@ -163,26 +177,27 @@ final class OrdersTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
 
         $response = $this->orders->getOrder($orderNumber);
+        $captures = $response->getCaptures();
 
-        self::assertSame([], $response->cancellations);
-        self::assertInstanceOf(Capture::class, $response->captures[0]);
-        self::assertSame('38', $response->captures[0]->amount);
-        self::assertSame('38', $response->captures[0]->balance);
-        self::assertInstanceOf(CaptureItem::class, $response->captures[0]->captureItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->captures[0]->captureItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->captures[0]->captureItems[0]->quantity);
-        self::assertSame($captureNumber, $response->captures[0]->captureNumber);
-        self::assertSame('EUR', $response->captures[0]->currency);
-        self::assertSame('', $response->captures[0]->customerNumber);
-        self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
-        self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
-        self::assertSame($orderNumber, $response->captures[0]->orderNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
-        self::assertSame('0', $response->captures[0]->totalRefundedAmount);
-        self::assertNull($response->captures[0]->updatedAt);
-        self::assertSame([], $response->refunds);
+        self::assertSame([], $response->getCancellations());
+        self::assertInstanceOf(Capture::class, $captures[0]);
+        self::assertSame('38', $captures[0]->getAmount());
+        self::assertSame('38', $captures[0]->getBalance());
+        self::assertInstanceOf(CaptureItem::class, $captures[0]->getCaptureItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $captures[0]->getCaptureItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
+        self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
+        self::assertSame('EUR', $captures[0]->getCurrency());
+        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNull($captures[0]->getDueDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
+        self::assertNull($captures[0]->getInvoiceDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getOrderDate());
+        self::assertSame($orderNumber, $captures[0]->getOrderNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $captures[0]->getReservationId());
+        self::assertSame('0', $captures[0]->getTotalRefundedAmount());
+        self::assertNull($captures[0]->getUpdatedAt());
+        self::assertSame([], $response->getRefunds());
     }
 
     public function testGetOrderRefunded(): void
@@ -192,22 +207,23 @@ final class OrdersTest extends ApiTestCase
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
         $response = $this->orders->getOrder($orderNumber);
+        $refunds = $response->getRefunds();
 
-        self::assertSame([], $response->cancellations);
-        self::assertInstanceOf(Refund::class, $response->refunds[0]);
-        self::assertSame('-12.5', $response->refunds[0]->amount);
-        self::assertSame('-12.5', $response->refunds[0]->balance);
-        self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
-        self::assertSame('EUR', $response->refunds[0]->currency);
-        self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
-        self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
-        self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->refunds[0]->refundItems[0]->quantity);
-        self::assertSame($refundNumbers[0], $response->refunds[0]->refundNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->refunds[0]->reservationId);
-        self::assertNull($response->refunds[0]->updatedAt);
+        self::assertSame([], $response->getCancellations());
+        self::assertInstanceOf(Refund::class, $refunds[0]);
+        self::assertSame('-12.5', $refunds[0]->getAmount());
+        self::assertSame('-12.5', $refunds[0]->getBalance());
+        self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
+        self::assertSame('EUR', $refunds[0]->getCurrency());
+        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
+        self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
+        self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $refunds[0]->getRefundItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $refunds[0]->getRefundItems()[0]->getQuantity());
+        self::assertSame($refundNumbers[0], $refunds[0]->getRefundNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $refunds[0]->getReservationId());
+        self::assertNull($refunds[0]->getUpdatedAt());
     }
 
     public function testGetOrderWithUnknownNumber(): void
@@ -223,14 +239,15 @@ final class OrdersTest extends ApiTestCase
         $this->cancel($orderNumber);
 
         $response = $this->orders->getVoids($orderNumber);
+        $cancellations = $response->getCancellations();
 
-        self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
-        self::assertSame('38', $response->cancellations[0]->cancellationAmount);
-        self::assertInstanceOf(CancellationItem::class, $response->cancellations[0]->cancellationItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->cancellations[0]->cancellationItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->cancellations[0]->cancellationItems[0]->quantity);
-        self::assertSame($response->cancellations[0]->cancellationNo, $response->cancellations[0]->cancellationItems[0]->cancellationNumber);
-        self::assertIsString($response->cancellations[0]->cancellationNo);
+        self::assertInstanceOf(Cancellation::class, $cancellations[0]);
+        self::assertSame('38', $cancellations[0]->getCancellationAmount());
+        self::assertInstanceOf(CancellationItem::class, $cancellations[0]->getCancellationItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $cancellations[0]->getCancellationItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $cancellations[0]->getCancellationItems()[0]->getQuantity());
+        self::assertSame($cancellations[0]->getCancellationNo(), $cancellations[0]->getCancellationItems()[0]->getCancellationNumber());
+        self::assertIsString($cancellations[0]->getCancellationNo());
     }
 
     public function testGetVoidsWithUnknownOrder(): void
@@ -244,16 +261,18 @@ final class OrdersTest extends ApiTestCase
     {
         $this->checkout($orderNumber = TestData::orderNumber());
         $this->cancel($orderNumber);
+        $voidNumber = $this->orders->getVoids($orderNumber)->getCancellations()[0]->getCancellationNo();
 
-        $response = $this->orders->getVoid($orderNumber, $this->orders->getVoids($orderNumber)->cancellations[0]->cancellationNo);
+        $response = $this->orders->getVoid($orderNumber, $voidNumber);
+        $cancellations = $response->getCancellations();
 
-        self::assertInstanceOf(Cancellation::class, $response->cancellations[0]);
-        self::assertSame('38', $response->cancellations[0]->cancellationAmount);
-        self::assertInstanceOf(CancellationItem::class, $response->cancellations[0]->cancellationItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->cancellations[0]->cancellationItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->cancellations[0]->cancellationItems[0]->quantity);
-        self::assertSame($response->cancellations[0]->cancellationNo, $response->cancellations[0]->cancellationItems[0]->cancellationNumber);
-        self::assertIsString($response->cancellations[0]->cancellationNo);
+        self::assertInstanceOf(Cancellation::class, $cancellations[0]);
+        self::assertSame('38', $cancellations[0]->getCancellationAmount());
+        self::assertInstanceOf(CancellationItem::class, $cancellations[0]->getCancellationItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $cancellations[0]->getCancellationItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $cancellations[0]->getCancellationItems()[0]->getQuantity());
+        self::assertSame($cancellations[0]->getCancellationNo(), $cancellations[0]->getCancellationItems()[0]->getCancellationNumber());
+        self::assertIsString($cancellations[0]->getCancellationNo());
     }
 
     public function testGetVoidWithUnknownNumber(): void
@@ -272,21 +291,22 @@ final class OrdersTest extends ApiTestCase
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
         $response = $this->orders->getRefunds($orderNumber);
+        $refunds = $response->getRefunds();
 
-        self::assertInstanceOf(Refund::class, $response->refunds[0]);
-        self::assertSame('-12.5', $response->refunds[0]->amount);
-        self::assertSame('-12.5', $response->refunds[0]->balance);
-        self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
-        self::assertSame('EUR', $response->refunds[0]->currency);
-        self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
-        self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
-        self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->refunds[0]->refundItems[0]->quantity);
-        self::assertSame($refundNumbers[0], $response->refunds[0]->refundNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->refunds[0]->reservationId);
-        self::assertNull($response->refunds[0]->updatedAt);
+        self::assertInstanceOf(Refund::class, $refunds[0]);
+        self::assertSame('-12.5', $refunds[0]->getAmount());
+        self::assertSame('-12.5', $refunds[0]->getBalance());
+        self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
+        self::assertSame('EUR', $refunds[0]->getCurrency());
+        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
+        self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
+        self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $refunds[0]->getRefundItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $refunds[0]->getRefundItems()[0]->getQuantity());
+        self::assertSame($refundNumbers[0], $refunds[0]->getRefundNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $refunds[0]->getReservationId());
+        self::assertNull($refunds[0]->getUpdatedAt());
     }
 
     public function testGetRefundsWithUnknownOrder(): void
@@ -303,21 +323,22 @@ final class OrdersTest extends ApiTestCase
         $refundNumbers = $this->refund($orderNumber, $captureNumber);
 
         $response = $this->orders->getRefund($orderNumber, $refundNumbers[0]);
+        $refunds = $response->getRefunds();
 
-        self::assertInstanceOf(Refund::class, $response->refunds[0]);
-        self::assertSame('-12.5', $response->refunds[0]->amount);
-        self::assertSame('-12.5', $response->refunds[0]->balance);
-        self::assertSame($captureNumber, $response->refunds[0]->captureNumber);
-        self::assertSame('EUR', $response->refunds[0]->currency);
-        self::assertSame('', $response->refunds[0]->customerNumber);
-        self::assertInstanceOf(\DateTime::class, $response->refunds[0]->insertedAt);
-        self::assertSame($orderNumber, $response->refunds[0]->orderNumber);
-        self::assertInstanceOf(RefundItem::class, $response->refunds[0]->refundItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->refunds[0]->refundItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->refunds[0]->refundItems[0]->quantity);
-        self::assertSame($refundNumbers[0], $response->refunds[0]->refundNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->refunds[0]->reservationId);
-        self::assertNull($response->refunds[0]->updatedAt);
+        self::assertInstanceOf(Refund::class, $refunds[0]);
+        self::assertSame('-12.5', $refunds[0]->getAmount());
+        self::assertSame('-12.5', $refunds[0]->getBalance());
+        self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
+        self::assertSame('EUR', $refunds[0]->getCurrency());
+        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
+        self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
+        self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $refunds[0]->getRefundItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $refunds[0]->getRefundItems()[0]->getQuantity());
+        self::assertSame($refundNumbers[0], $refunds[0]->getRefundNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $refunds[0]->getReservationId());
+        self::assertNull($refunds[0]->getUpdatedAt());
     }
 
     public function testGetRefundWithUnknownNumber(): void
@@ -335,24 +356,25 @@ final class OrdersTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
 
         $response = $this->orders->getCaptures($orderNumber);
+        $captures = $response->getCaptures();
 
-        self::assertInstanceOf(Capture::class, $response->captures[0]);
-        self::assertSame('38', $response->captures[0]->amount);
-        self::assertSame('38', $response->captures[0]->balance);
-        self::assertInstanceOf(CaptureItem::class, $response->captures[0]->captureItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->captures[0]->captureItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->captures[0]->captureItems[0]->quantity);
-        self::assertSame($captureNumber, $response->captures[0]->captureNumber);
-        self::assertSame('EUR', $response->captures[0]->currency);
-        self::assertSame('', $response->captures[0]->customerNumber);
-        self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
-        self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
-        self::assertSame($orderNumber, $response->captures[0]->orderNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
-        self::assertSame('0', $response->captures[0]->totalRefundedAmount);
-        self::assertNull($response->captures[0]->updatedAt);
+        self::assertInstanceOf(Capture::class, $captures[0]);
+        self::assertSame('38', $captures[0]->getAmount());
+        self::assertSame('38', $captures[0]->getBalance());
+        self::assertInstanceOf(CaptureItem::class, $captures[0]->getCaptureItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $captures[0]->getCaptureItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
+        self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
+        self::assertSame('EUR', $captures[0]->getCurrency());
+        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNull($captures[0]->getDueDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
+        self::assertNull($captures[0]->getInvoiceDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getOrderDate());
+        self::assertSame($orderNumber, $captures[0]->getOrderNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $captures[0]->getReservationId());
+        self::assertSame('0', $captures[0]->getTotalRefundedAmount());
+        self::assertNull($captures[0]->getUpdatedAt());
     }
 
     public function testGetCapturesWithUnknownOrder(): void
@@ -368,24 +390,25 @@ final class OrdersTest extends ApiTestCase
         $captureNumber = $this->capture($orderNumber);
 
         $response = $this->orders->getCapture($orderNumber, $captureNumber);
+        $captures = $response->getCaptures();
 
-        self::assertInstanceOf(Capture::class, $response->captures[0]);
-        self::assertSame('38', $response->captures[0]->amount);
-        self::assertSame('38', $response->captures[0]->balance);
-        self::assertInstanceOf(CaptureItem::class, $response->captures[0]->captureItems[0]);
-        self::assertSame(TestData::orderItems()[0]->productId, $response->captures[0]->captureItems[0]->productId);
-        self::assertSame(TestData::orderItems()[0]->quantity, (int) $response->captures[0]->captureItems[0]->quantity);
-        self::assertSame($captureNumber, $response->captures[0]->captureNumber);
-        self::assertSame('EUR', $response->captures[0]->currency);
-        self::assertSame('', $response->captures[0]->customerNumber);
-        self::assertNull($response->captures[0]->dueDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->insertedAt);
-        self::assertNull($response->captures[0]->invoiceDate);
-        self::assertInstanceOf(\DateTime::class, $response->captures[0]->orderDate);
-        self::assertSame($orderNumber, $response->captures[0]->orderNumber);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->captures[0]->reservationId);
-        self::assertSame('0', $response->captures[0]->totalRefundedAmount);
-        self::assertNull($response->captures[0]->updatedAt);
+        self::assertInstanceOf(Capture::class, $captures[0]);
+        self::assertSame('38', $captures[0]->getAmount());
+        self::assertSame('38', $captures[0]->getBalance());
+        self::assertInstanceOf(CaptureItem::class, $captures[0]->getCaptureItems()[0]);
+        self::assertSame(TestData::orderItems()[0]->getProductId(), $captures[0]->getCaptureItems()[0]->getProductId());
+        self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
+        self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
+        self::assertSame('EUR', $captures[0]->getCurrency());
+        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNull($captures[0]->getDueDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
+        self::assertNull($captures[0]->getInvoiceDate());
+        self::assertInstanceOf(\DateTime::class, $captures[0]->getOrderDate());
+        self::assertSame($orderNumber, $captures[0]->getOrderNumber());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $captures[0]->getReservationId());
+        self::assertSame('0', $captures[0]->getTotalRefundedAmount());
+        self::assertNull($captures[0]->getUpdatedAt());
     }
 
     public function testGetCaptureWithUnknownNumber(): void
@@ -400,26 +423,27 @@ final class OrdersTest extends ApiTestCase
     public function testUpdateOrder(): void
     {
         $this->checkout($orderNumber = TestData::orderNumber());
+        $order = $this->orders->getOrder($orderNumber);
 
-        self::assertSame(TestData::orderItems()[0]->description, $this->orders->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+        self::assertSame(TestData::orderItems()[0]->getDescription(), $order->getOrderDetails()->getOrderItems()[0]->getDescription());
 
         $request = new UpdateOrderRequest();
-        $request->updateOrderSummary = TestData::orderSummary();
-        $request->updateOrderSummary->items[0]->description .= ' MODIFIED';
+        $request->setUpdateOrderSummary(TestData::orderSummary());
+        $request->getUpdateOrderSummary()->getItems()[0]->setDescription(__METHOD__);
 
         $response = $this->orders->updateOrder($orderNumber, $request);
 
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->checkoutId);
-        self::assertInstanceOf(\DateTime::class, $response->expirationDate);
-        self::assertSame(Outcome::ACCEPTED, $response->outcome);
-        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->reservationId);
-        self::assertSame(TestData::orderItems()[0]->description.' MODIFIED', $this->orders->getOrder($orderNumber)->orderDetails->orderItems[0]->description);
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
+        self::assertInstanceOf(\DateTime::class, $response->getExpirationDate());
+        self::assertSame(Outcome::ACCEPTED, $response->getOutcome());
+        self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getReservationId());
+        self::assertSame(__METHOD__, $this->orders->getOrder($orderNumber)->getOrderDetails()->getOrderItems()[0]->getDescription());
     }
 
     public function testUpdateOrderWithUnknownNumber(): void
     {
         $request = new UpdateOrderRequest();
-        $request->updateOrderSummary = TestData::orderSummary();
+        $request->setUpdateOrderSummary(TestData::orderSummary());
 
         $this->expectException(AfterPayException::class);
 

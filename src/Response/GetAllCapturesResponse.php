@@ -9,5 +9,23 @@ use Etrias\AfterPayConnector\Type\Capture;
 class GetAllCapturesResponse
 {
     /** @var Capture[] */
-    public $captures = [];
+    protected $captures = [];
+
+    /**
+     * @return Capture[]
+     */
+    public function getCaptures(): array
+    {
+        return $this->captures;
+    }
+
+    /**
+     * @param Capture[] $captures
+     */
+    public function setCaptures(array $captures): self
+    {
+        $this->captures = $captures;
+
+        return $this;
+    }
 }

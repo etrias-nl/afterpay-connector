@@ -16,12 +16,17 @@ abstract class TestData
 {
     public static function checkoutCustomer(): CheckoutCustomer
     {
-        $customer = CheckoutCustomer::forPerson('john.doe@domain.test')
-            ->withFullName(CheckoutCustomer::SALUTATION_MR, 'John', 'Doe 😁')
-            ->withBirthDate(28, 7, 1987)
+        $customer = new CheckoutCustomer();
+        $customer
+            ->setCustomerCategory(CheckoutCustomer::CATEGORY_PERSON)
+            ->setEmail('john.doe@domain.test')
+            ->setSalutation(CheckoutCustomer::SALUTATION_MR)
+            ->setFirstName('John')
+            ->setLastName('Doe 😁')
+            ->setBirthDate((new \DateTime())->setTimestamp(mktime(0, 0, 0, 7, 28, 1987)))
+            ->setAddress(self::address())
+            ->setRiskData(self::customerRisk())
         ;
-        $customer->address = self::address();
-        $customer->riskData = self::customerRisk();
 
         return $customer;
     }
@@ -29,29 +34,49 @@ abstract class TestData
     public static function customerRisk(): CustomerRisk
     {
         $risk = new CustomerRisk();
-        $risk->ipAddress = '127.0.0.1';
+        $risk->setIpAddress('127.0.0.1');
 
         return $risk;
     }
 
     public static function address(): Address
     {
-        return Address::forPlace('NL', '1111AA', 'Test stad 😁')
-            ->withStreet('Straatnaam 😁', '1', 'A')
+        $address = new Address();
+        $address
+            ->setPostalCode('1111AA')
+            ->setPostalPlace('Test stad 😁')
+            ->setCountryCode('NL')
+            ->setStreet('Straatnaam 😁')
+            ->setStreetNumber('1')
+            ->setStreetNumberAdditional('A')
         ;
+
+        return $address;
     }
 
     public static function order(?string $number = null): Order
     {
-        $order = Order::forItems(self::orderItems());
-        $order->number = $number ?? self::orderNumber();
+        $order = new Order();
+        $order
+            ->setNumber($number ?? self::orderNumber())
+            ->setItems(self::orderItems())
+            ->setTotalGrossAmount(38)
+            ->setTotalNetAmount(26.5)
+        ;
 
         return $order;
     }
 
     public static function orderSummary(): OrderSummary
     {
-        return OrderSummary::forItems(self::orderItems());
+        $orderSummary = new OrderSummary();
+        $orderSummary
+            ->setItems(self::orderItems())
+            ->setTotalGrossAmount(38)
+            ->setTotalNetAmount(26.5)
+        ;
+
+        return $orderSummary;
     }
 
     /**
@@ -59,19 +84,46 @@ abstract class TestData
      */
     public static function orderItems(): array
     {
-        return [
-            OrderItem::forProduct('A', 'Product A', 1)
-                ->withPrice(10, 2.5, 21),
-            OrderItem::forProduct('B', 'Product B 😁', 3)
-                ->withPrice(5.5, 3, 6),
-        ];
+        $orderItem1 = new OrderItem();
+        $orderItem1
+            ->setProductId('A')
+            ->setDescription('Product A')
+            ->setQuantity(1)
+            ->setNetUnitPrice(10)
+            ->setGrossUnitPrice(12.5)
+            ->setVatAmount(2.5)
+            ->setVatPercent(21)
+        ;
+
+        $orderItem2 = new OrderItem();
+        $orderItem2
+            ->setProductId('B')
+            ->setDescription('Product B 😁')
+            ->setQuantity(3)
+            ->setNetUnitPrice(5.5)
+            ->setGrossUnitPrice(8.5)
+            ->setVatAmount(3)
+            ->setVatPercent(6)
+        ;
+
+        return [$orderItem1, $orderItem2];
     }
 
     public static function refundOrderItem(): RefundOrderItem
     {
-        return RefundOrderItem::forProduct('A', 'Product A', 1)
-            ->withPrice(10, 2.5, 21)
+        $orderItem = new RefundOrderItem();
+        $orderItem
+            ->setProductId('A')
+            ->setDescription('Product A')
+            ->setDescription('Product A')
+            ->setQuantity(1)
+            ->setNetUnitPrice(10)
+            ->setGrossUnitPrice(12.5)
+            ->setVatAmount(2.5)
+            ->setVatPercent(21)
         ;
+
+        return  $orderItem;
     }
 
     public static function orderNumber(): string

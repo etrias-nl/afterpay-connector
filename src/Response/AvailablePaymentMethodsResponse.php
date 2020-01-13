@@ -11,5 +11,23 @@ class AvailablePaymentMethodsResponse
     use AuthorizeResponseTrait;
 
     /** @var PaymentMethod[] */
-    public $paymentMethods = [];
+    protected $paymentMethods = [];
+
+    /**
+     * @return PaymentMethod[]
+     */
+    public function getPaymentMethods(): array
+    {
+        return $this->paymentMethods;
+    }
+
+    /**
+     * @param PaymentMethod[] $paymentMethods
+     */
+    public function setPaymentMethods(array $paymentMethods): self
+    {
+        $this->paymentMethods = $paymentMethods;
+
+        return $this;
+    }
 }
