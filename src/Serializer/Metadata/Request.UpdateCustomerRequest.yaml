@@ -1,0 +1,11 @@
+Etrias\AfterPayConnector\Request\UpdateCustomerRequest:
+  properties:
+    distributionType:
+      type: string
+      serialized_name: distributionType
+    email:
+      type: string
+      serialized_name: email
+    mobilePhone:
+      type: string
+      serialized_name: mobilePhone

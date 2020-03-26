@@ -15,6 +15,10 @@ abstract class AbstractApi
 {
     protected const JSON_FORMAT = 'json';
     protected const JSON_CONTENT_TYPE = 'application/json';
+    protected const JSON_ACCEPT_HEADERS = [
+        'Accept' => self::JSON_CONTENT_TYPE,
+        'Content-Type' => self::JSON_CONTENT_TYPE,
+    ];
 
     /** @var HttpMethodsClientInterface */
     protected $client;
@@ -37,14 +41,12 @@ abstract class AbstractApi
 
     protected function postJson(UriInterface $uri, object $data): ResponseInterface
     {
-        return $this->client->post(
-            $uri,
-            [
-                'Accept' => self::JSON_CONTENT_TYPE,
-                'Content-Type' => self::JSON_CONTENT_TYPE,
-            ],
-            $this->serializer->serialize($data, self::JSON_FORMAT)
-        );
+        return $this->client->post($uri, self::JSON_ACCEPT_HEADERS, $this->serializer->serialize($data, self::JSON_FORMAT));
+    }
+
+    protected function patchJson(UriInterface $uri, object $data): ResponseInterface
+    {
+        return $this->client->patch($uri, self::JSON_ACCEPT_HEADERS, $this->serializer->serialize($data, self::JSON_FORMAT));
     }
 
     protected function getJson(UriInterface $uri): ResponseInterface
