@@ -12,6 +12,6 @@ class Customers extends AbstractApi
     {
         $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/customers/{customerNumber}/updateCustomer', compact('customerNumber')));
 
-        $this->postJson($uri, $request);
+        $this->patchJson($uri, $request);
     }
 }
