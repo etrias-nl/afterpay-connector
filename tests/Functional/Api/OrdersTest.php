@@ -209,7 +209,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
         self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
         self::assertSame('EUR', $captures[0]->getCurrency());
-        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNotEmpty($captures[0]->getCustomerNumber());
         self::assertNull($captures[0]->getDueDate());
         self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
         self::assertNull($captures[0]->getInvoiceDate());
@@ -236,7 +236,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('-12.5', $refunds[0]->getBalance());
         self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
         self::assertSame('EUR', $refunds[0]->getCurrency());
-        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertNotEmpty($refunds[0]->getCustomerNumber());
         self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
         self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
         self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
@@ -319,7 +319,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('-12.5', $refunds[0]->getBalance());
         self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
         self::assertSame('EUR', $refunds[0]->getCurrency());
-        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertNotEmpty($refunds[0]->getCustomerNumber());
         self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
         self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
         self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
@@ -351,7 +351,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame('-12.5', $refunds[0]->getBalance());
         self::assertSame($captureNumber, $refunds[0]->getCaptureNumber());
         self::assertSame('EUR', $refunds[0]->getCurrency());
-        self::assertSame('', $refunds[0]->getCustomerNumber());
+        self::assertNotEmpty($refunds[0]->getCustomerNumber());
         self::assertInstanceOf(\DateTime::class, $refunds[0]->getInsertedAt());
         self::assertSame($orderNumber, $refunds[0]->getOrderNumber());
         self::assertInstanceOf(RefundItem::class, $refunds[0]->getRefundItems()[0]);
@@ -387,7 +387,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
         self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
         self::assertSame('EUR', $captures[0]->getCurrency());
-        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNotEmpty($captures[0]->getCustomerNumber());
         self::assertNull($captures[0]->getDueDate());
         self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
         self::assertNull($captures[0]->getInvoiceDate());
@@ -421,7 +421,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $captures[0]->getCaptureItems()[0]->getQuantity());
         self::assertSame($captureNumber, $captures[0]->getCaptureNumber());
         self::assertSame('EUR', $captures[0]->getCurrency());
-        self::assertSame('', $captures[0]->getCustomerNumber());
+        self::assertNotEmpty($captures[0]->getCustomerNumber());
         self::assertNull($captures[0]->getDueDate());
         self::assertInstanceOf(\DateTime::class, $captures[0]->getInsertedAt());
         self::assertNull($captures[0]->getInvoiceDate());
