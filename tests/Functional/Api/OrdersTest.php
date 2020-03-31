@@ -48,6 +48,27 @@ final class OrdersTest extends ApiTestCase
         self::assertNull($response->getDeliveryCustomer());
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getReservationId());
+        self::assertSame([], $response->getRiskCheckMessages());
+    }
+
+    public function testRejectedAuthorizePayment(): void
+    {
+        $payment = new Payment();
+        $payment->setType(Payment::TYPE_INVOICE);
+
+        $request = new AuthorizePaymentRequest();
+        $request
+            ->setPayment($payment)
+            ->setCustomer(TestData::checkoutCustomer())
+            ->setOrder(TestData::order())
+        ;
+
+        $request->getCustomer()->setFirstName('Reject');
+
+        $response = $this->orders->authorizePayment($request);
+
+        self::assertSame(Outcome::REJECTED, $response->getOutcome());
+        self::assertNotEmpty($response->getRiskCheckMessages());
     }
 
     public function testAvailablePaymentMethods(): void

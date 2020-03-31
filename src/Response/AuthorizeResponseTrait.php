@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Etrias\AfterPayConnector\Response;
 
+use Etrias\AfterPayConnector\Type\ResponseMessage;
+
 trait AuthorizeResponseTrait
 {
     /** @var null|string */
@@ -17,6 +19,9 @@ trait AuthorizeResponseTrait
 
     /** @var null|string */
     protected $checkoutId;
+
+    /** @var ResponseMessage[] */
+    protected $riskCheckMessages = [];
 
     public function getOutcome(): ?string
     {
@@ -62,6 +67,21 @@ trait AuthorizeResponseTrait
     public function setCheckoutId(?string $checkoutId): self
     {
         $this->checkoutId = $checkoutId;
+
+        return $this;
+    }
+
+    /**
+     * @return ResponseMessage[]
+     */
+    public function getRiskCheckMessages(): array
+    {
+        return $this->riskCheckMessages;
+    }
+
+    public function setRiskCheckMessages($riskCheckMessages): self
+    {
+        $this->riskCheckMessages = $riskCheckMessages;
 
         return $this;
     }
