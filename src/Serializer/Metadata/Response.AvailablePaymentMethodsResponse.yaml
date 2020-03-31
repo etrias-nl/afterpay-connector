@@ -15,3 +15,6 @@ Etrias\AfterPayConnector\Response\AvailablePaymentMethodsResponse:
     paymentMethods:
       type: array<Etrias\AfterPayConnector\Type\PaymentMethod>
       serialized_name: paymentMethods
+    riskCheckMessages:
+      type: array<Etrias\AfterPayConnector\Type\ResponseMessage>
+      serialized_name: riskCheckMessages

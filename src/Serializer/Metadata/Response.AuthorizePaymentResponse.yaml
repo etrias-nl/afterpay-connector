@@ -18,3 +18,6 @@ Etrias\AfterPayConnector\Response\AuthorizePaymentResponse:
     expirationDate:
       type: DateTime<null, null, 'Y-m-d'>
       serialized_name: expirationDate
+    riskCheckMessages:
+      type: array<Etrias\AfterPayConnector\Type\ResponseMessage>
+      serialized_name: riskCheckMessages

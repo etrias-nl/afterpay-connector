@@ -128,6 +128,6 @@ abstract class TestData
 
     public static function orderNumber(): string
     {
-        return 'TEST-'.bin2hex(random_bytes(10));
+        return 'TEST-'.bin2hex(random_bytes(5));
     }
 }
