@@ -21,3 +21,6 @@ Etrias\AfterPayConnector\Type\CaptureItem:
     vatPercent:
       type: string
       serialized_name: vatPercent
+    groupId:
+      type: string
+      serialized_name: groupId
