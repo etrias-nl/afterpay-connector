@@ -27,6 +27,9 @@ trait OrderItemTrait
     /** @var null|float|int|string */
     protected $vatPercent;
 
+    /** @var null|string */
+    protected $groupId;
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -167,6 +170,18 @@ trait OrderItemTrait
         } elseif (null !== $vatAmount) {
             $this->grossUnitPrice = $vatAmount;
         }
+
+        return $this;
+    }
+
+    public function getGroupId(): ?string
+    {
+        return $this->groupId;
+    }
+
+    public function setGroupId(?string $groupId): self
+    {
+        $this->groupId = $groupId;
 
         return $this;
     }

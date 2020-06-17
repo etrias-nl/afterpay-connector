@@ -43,7 +43,7 @@ final class OrdersTest extends ApiTestCase
 
         self::assertSame(Outcome::ACCEPTED, $response->getOutcome());
         self::assertSame('John', $response->getCustomer()->getFirstName());
-        self::assertSame('Doe 😁', $response->getCustomer()->getLastName());
+        self::assertSame('Doë', $response->getCustomer()->getLastName());
         self::assertSame('NL', $response->getCustomer()->getAddressList()[0]->getCountryCode());
         self::assertNull($response->getDeliveryCustomer());
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
@@ -83,7 +83,7 @@ final class OrdersTest extends ApiTestCase
 
         self::assertSame(Outcome::ACCEPTED, $response->getOutcome());
         self::assertSame('John', $response->getCustomer()->getFirstName());
-        self::assertSame('Doe 😁', $response->getCustomer()->getLastName());
+        self::assertSame('Doë', $response->getCustomer()->getLastName());
         self::assertSame('NL', $response->getCustomer()->getAddressList()[0]->getCountryCode());
         self::assertNull($response->getDeliveryCustomer());
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $response->getCheckoutId());
