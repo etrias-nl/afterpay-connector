@@ -22,7 +22,7 @@ abstract class TestData
             ->setEmail('john.doe@domain.test')
             ->setSalutation(CheckoutCustomer::SALUTATION_MR)
             ->setFirstName('John')
-            ->setLastName('Doe 😁')
+            ->setLastName('Doë')
             ->setBirthDate((new \DateTime())->setTimestamp(mktime(0, 0, 0, 7, 28, 1987)))
             ->setAddress(self::address())
             ->setRiskData(self::customerRisk())
