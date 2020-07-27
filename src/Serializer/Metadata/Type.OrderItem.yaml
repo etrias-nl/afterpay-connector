@@ -24,3 +24,6 @@ Etrias\AfterPayConnector\Type\OrderItem:
     groupId:
       type: string
       serialized_name: groupId
+    imageUrl:
+      type: string
+      serialized_name: imageUrl

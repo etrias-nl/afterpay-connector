@@ -24,3 +24,6 @@ Etrias\AfterPayConnector\Type\RefundOrderItem:
     groupId:
       type: string
       serialized_name: groupId
+    imageUrl:
+      type: string
+      serialized_name: imageUrl
