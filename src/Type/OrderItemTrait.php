@@ -30,6 +30,9 @@ trait OrderItemTrait
     /** @var null|string */
     protected $groupId;
 
+    /** @var null|string */
+    protected $imageUrl;
+
     public function getDescription(): ?string
     {
         return $this->description;
@@ -182,6 +185,18 @@ trait OrderItemTrait
     public function setGroupId(?string $groupId): self
     {
         $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): self
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
