@@ -92,6 +92,7 @@ abstract class ApiTestCase extends TestCase
             ->setRefundType(RefundType::REFUND)
             ->setCaptureNumber($captureNumber)
             ->setItems([TestData::refundOrderItem()])
+            ->setTransactionReference($orderNumber.'-transaction-reference')
         ;
 
         return $this->orders->refundPayment($orderNumber, $request)->getRefundNumbers();

@@ -139,6 +139,7 @@ final class OrdersTest extends ApiTestCase
             ->setCaptureNumber($captureNumber)
             ->setRefundType(RefundType::REFUND)
             ->setItems([TestData::refundOrderItem()])
+            ->setTransactionReference($orderNumber.'-transaction-reference')
         ;
 
         $response = $this->orders->refundPayment($orderNumber, $request);
@@ -244,6 +245,7 @@ final class OrdersTest extends ApiTestCase
         self::assertSame(TestData::orderItems()[0]->getQuantity(), (int) $refunds[0]->getRefundItems()[0]->getQuantity());
         self::assertSame($refundNumbers[0], $refunds[0]->getRefundNumber());
         self::assertStringMatchesFormat('%x-%x-%x-%x-%x', $refunds[0]->getReservationId());
+        self::assertSame($orderNumber.'-transaction-reference', $refunds[0]->getTransactionReference());
         self::assertNull($refunds[0]->getUpdatedAt());
     }
 
