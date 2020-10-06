@@ -6,8 +6,6 @@ namespace Etrias\AfterPayConnector\Type;
 
 class Refund
 {
-    use ReferencesTrait;
-
     /** @var null|float|int|string */
     protected $amount;
 
@@ -37,6 +35,9 @@ class Refund
 
     /** @var null|string */
     protected $reservationId;
+
+    /** @var null|string */
+    protected $transactionReference;
 
     /** @var null|\DateTime */
     protected $updatedAt;
@@ -179,6 +180,18 @@ class Refund
     public function setReservationId(?string $reservationId): self
     {
         $this->reservationId = $reservationId;
+
+        return $this;
+    }
+
+    public function getTransactionReference(): ?string
+    {
+        return $this->transactionReference;
+    }
+
+    public function setTransactionReference(?string $transactionReference): self
+    {
+        $this->transactionReference = $transactionReference;
 
         return $this;
     }
