@@ -15,3 +15,6 @@ Etrias\AfterPayConnector\Request\RefundOrderRequest:
     refundType:
       type: string
       serialized_name: refundType
+    transactionReference:
+      type: string
+      serialized_name: transactionReference

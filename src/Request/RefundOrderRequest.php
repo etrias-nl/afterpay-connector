@@ -23,6 +23,9 @@ class RefundOrderRequest
     /** @var null|string */
     protected $refundType;
 
+    /** @var null|string */
+    protected $transactionReference;
+
     public function getCaptureNumber(): ?string
     {
         return $this->captureNumber;
@@ -92,6 +95,18 @@ class RefundOrderRequest
     public function setRefundType(?string $refundType): self
     {
         $this->refundType = $refundType;
+
+        return $this;
+    }
+
+    public function getTransactionReference(): ?string
+    {
+        return $this->transactionReference;
+    }
+
+    public function setTransactionReference(?string $transactionReference): self
+    {
+        $this->transactionReference = $transactionReference;
 
         return $this;
     }
