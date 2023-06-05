@@ -1,5 +1,2 @@
-/.phplint-cache
-/.phpunit.result.cache
 /composer.lock
-/php-cs-fixer.cache
 /vendor
