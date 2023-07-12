@@ -5,7 +5,7 @@
     "require": {
         "php": "^7.4 || ^8.1",
         "jms/serializer": "^3.1",
-        "php-http/client-common": "^2.0",
+        "php-http/client-common": "^2.7.0",
         "php-http/discovery": "^1.6"
     },
     "autoload": {
