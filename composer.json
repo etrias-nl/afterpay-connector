@@ -3,7 +3,7 @@
     "description": "Connector to AfterPay connector",
     "license": "Apache-2.0",
     "require": {
-        "php": "^8.1",
+        "php": "~8.1.21",
         "jms/serializer": "^3.26.0",
         "php-http/client-common": "^2.7.0",
         "php-http/discovery": "^1.19.1"
