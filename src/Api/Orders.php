@@ -20,6 +20,7 @@ use Etrias\AfterPayConnector\Response\GetVoidsResponse;
 use Etrias\AfterPayConnector\Response\RefundOrderResponse;
 use Etrias\AfterPayConnector\Response\UpdateOrderResponse;
 use Etrias\AfterPayConnector\Response\VoidAuthorizationResponse;
+use GuzzleHttp\UriTemplate\UriTemplate;
 
 class Orders extends AbstractApi
 {
@@ -41,7 +42,7 @@ class Orders extends AbstractApi
 
     public function capturePayment(string $orderNumber, CaptureRequest $request): CaptureResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/captures', compact('orderNumber')));
         $response = $this->postJson($uri, $request);
 
         return $this->deserialize($response, CaptureResponse::class);
@@ -49,7 +50,7 @@ class Orders extends AbstractApi
 
     public function voidAuthorization(string $orderNumber, VoidAuthorizationRequest $request): VoidAuthorizationResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/voids', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/voids', compact('orderNumber')));
         $response = $this->postJson($uri, $request);
 
         return $this->deserialize($response, VoidAuthorizationResponse::class);
@@ -57,7 +58,7 @@ class Orders extends AbstractApi
 
     public function refundPayment(string $orderNumber, RefundOrderRequest $request): RefundOrderResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/refunds', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/refunds', compact('orderNumber')));
         $response = $this->postJson($uri, $request);
 
         return $this->deserialize($response, RefundOrderResponse::class);
@@ -65,7 +66,7 @@ class Orders extends AbstractApi
 
     public function getOrder(string $orderNumber): GetOrderResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}', compact('orderNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetOrderResponse::class);
@@ -73,7 +74,7 @@ class Orders extends AbstractApi
 
     public function getVoids(string $orderNumber): GetVoidsResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/voids', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/voids', compact('orderNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetVoidsResponse::class);
@@ -81,7 +82,7 @@ class Orders extends AbstractApi
 
     public function getVoid(string $orderNumber, string $voidNumber): GetVoidsResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/voids/{voidNumber}', compact('orderNumber', 'voidNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/voids/{voidNumber}', compact('orderNumber', 'voidNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetVoidsResponse::class);
@@ -89,7 +90,7 @@ class Orders extends AbstractApi
 
     public function getRefunds(string $orderNumber): GetAllRefundsResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/refunds', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/refunds', compact('orderNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetAllRefundsResponse::class);
@@ -97,7 +98,7 @@ class Orders extends AbstractApi
 
     public function getRefund(string $orderNumber, string $refundNumber): GetAllRefundsResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/refunds/{refundNumber}', compact('orderNumber', 'refundNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/refunds/{refundNumber}', compact('orderNumber', 'refundNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetAllRefundsResponse::class);
@@ -105,7 +106,7 @@ class Orders extends AbstractApi
 
     public function getCaptures(string $orderNumber): GetAllCapturesResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/captures', compact('orderNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetAllCapturesResponse::class);
@@ -113,7 +114,7 @@ class Orders extends AbstractApi
 
     public function getCapture(string $orderNumber, string $captureNumber): GetAllCapturesResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/captures/{captureNumber}', compact('orderNumber', 'captureNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/captures/{captureNumber}', compact('orderNumber', 'captureNumber')));
         $response = $this->getJson($uri);
 
         return $this->deserialize($response, GetAllCapturesResponse::class);
@@ -121,7 +122,7 @@ class Orders extends AbstractApi
 
     public function updateOrder(string $orderNumber, UpdateOrderRequest $request): UpdateOrderResponse
     {
-        $uri = $this->uriFactory->createUri(\GuzzleHttp\uri_template('/orders/{orderNumber}/updateOrder', compact('orderNumber')));
+        $uri = $this->uriFactory->createUri(UriTemplate::expand('/orders/{orderNumber}/updateOrder', compact('orderNumber')));
         $response = $this->postJson($uri, $request);
 
         return $this->deserialize($response, UpdateOrderResponse::class);
