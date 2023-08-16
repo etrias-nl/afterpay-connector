@@ -1,0 +1,3 @@
+# ⚠ DEPRECATED
+
+No replacement suggested.
